@@ -83,4 +83,4 @@ Aplikasi ini berfokus penuh pada **aksesibilitas pembaca layar** (*TalkBack* di 
 ---
 
 ## 📄 Lisensi
-Internal — Pesantren Pelopor Teknologi Inklusif. All rights reserved.
+Internal — Pondok pesantren tunantera sam'an. All rights reserved.
