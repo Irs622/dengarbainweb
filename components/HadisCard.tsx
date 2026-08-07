@@ -19,7 +19,7 @@ export default function HadisCard({ hadis }: HadisCardProps) {
   return (
     <Link href={`/hadis/${hadis.id}`} className="hadis-card">
       {/* Top row */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', marginBottom: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', flex: 1, minWidth: 0 }}>
           {/* Number bubble */}
           <div style={{
@@ -35,9 +35,9 @@ export default function HadisCard({ hadis }: HadisCardProps) {
             <span style={{ fontSize: '0.8125rem', fontWeight: 800, color: numColor }}>{hadis.id}</span>
           </div>
           {/* Title */}
-          <h3 style={{
-            fontSize: '0.9375rem',
-            fontWeight: 700,
+          <h3 className="font-playfair" style={{
+            fontSize: '1.25rem',
+            fontWeight: 500,
             color: '#1A1A1A',
             lineHeight: 1.35,
             paddingTop: '2px',
@@ -55,9 +55,10 @@ export default function HadisCard({ hadis }: HadisCardProps) {
 
       {/* Preview */}
       <p style={{
-        fontSize: '0.8125rem',
+        fontSize: '0.9rem',
         color: '#6B7280',
         lineHeight: 1.6,
+        marginTop: '20px',
         marginBottom: '10px',
         overflow: 'hidden',
         display: '-webkit-box',
@@ -68,11 +69,11 @@ export default function HadisCard({ hadis }: HadisCardProps) {
       </p>
 
       {/* Footer */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: 500 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '32px' }}>
+        <span style={{ fontSize: '0.8rem', color: '#9CA3AF', fontWeight: 500 }}>
           {hadis.sumber}
         </span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
             stroke={hadis.status === 'hafal' ? '#1A5C40' : '#D1D5DB'}
             strokeWidth="2"

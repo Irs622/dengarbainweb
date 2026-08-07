@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -18,6 +19,18 @@
   --clr-text:          #1A1A1A;
   --clr-text-muted:    #6B7280;
   --clr-text-faint:    #9CA3AF;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-arabic {
+  font-family: 'Amiri', serif;
 }
 
 html {
@@ -94,7 +107,7 @@ button { font-family: inherit; }
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #FFFFFF;
+  background: #D1FAE5;
   border: 1.5px solid var(--clr-border);
   border-radius: 9999px;
   padding: 10px 16px;
@@ -139,7 +152,7 @@ button { font-family: inherit; }
 .hadis-card {
   background: #FFFFFF;
   border-radius: 16px;
-  padding: 16px;
+  padding: 32px;
   margin: 0 16px 12px;
   border: 1px solid #F0F0EA;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
@@ -159,9 +172,9 @@ button { font-family: inherit; }
 
 /* Continue card */
 .continue-card {
-  background: linear-gradient(135deg, #1A5C40 0%, #0D3D2A 100%);
+  background: #064E3B;
   border-radius: 20px;
-  padding: 20px;
+  padding: 32px;
   margin: 0 16px 24px;
   position: relative;
   overflow: hidden;
