@@ -4,7 +4,7 @@ import Link from 'next/link';
 const stats = [
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M3 18v-6a9 9 0 0 1 18 0v6" stroke="#1A5C40" strokeWidth="2" strokeLinecap="round"/>
         <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" stroke="#1A5C40" strokeWidth="2"/>
       </svg>
@@ -15,7 +15,7 @@ const stats = [
   },
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z" stroke="#F59E0B" strokeWidth="2"/>
         <path d="M12 6v6l4 2" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/>
       </svg>
@@ -26,7 +26,7 @@ const stats = [
   },
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" stroke="#6B7280" strokeWidth="2" strokeLinejoin="round"/>
         <line x1="4" y1="22" x2="4" y2="15" stroke="#6B7280" strokeWidth="2" strokeLinecap="round"/>
       </svg>
@@ -45,15 +45,34 @@ const recentActivity = [
 export default function ProgresPage() {
   return (
     <>
-      {/* Header */}
-      <div style={{ padding: '20px 16px 4px', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1A5C40', letterSpacing: '-0.02em' }}>
+      {/* App Header */}
+      <header
+        style={{
+          backgroundColor: "#FFFFFF",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+          padding: "12px 16px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <h1
+          className="font-playfair"
+          style={{
+            margin: 0,
+            fontSize: "1.75rem",
+            fontWeight: 900,
+            color: "#1A5C40",
+            lineHeight: 1,
+          }}
+        >
           DengarBain
         </h1>
-      </div>
+      </header>
 
-      <div style={{ padding: '4px 0' }}>
-        <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#1A1A1A', padding: '12px 16px 16px' }}>
+      <main>
+        <div style={{ padding: '4px 0' }}>
+        <h2 className="font-playfair" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#064E3B', padding: '12px 16px 16px' }}>
           Progres Anda
         </h2>
 
@@ -61,8 +80,8 @@ export default function ProgresPage() {
         <div style={{
           backgroundColor: '#FFFFFF',
           borderRadius: '20px',
-          margin: '0 16px 20px',
-          padding: '24px 20px',
+          margin: '0 16px 28px',
+          padding: '24px 32px',
           boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
           border: '1px solid #F0F0EA',
           textAlign: 'center',
@@ -71,20 +90,20 @@ export default function ProgresPage() {
             <CircularProgress percent={30} />
           </div>
 
-          <h3 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#1A1A1A', marginBottom: '6px' }}>
+          <h3 className="font-playfair" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1A1A1A', marginBottom: '6px' }}>
             Hafal 12 dari 40
           </h3>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, marginBottom: '20px' }}>
             Hebat! Kamu menguasai 3 hadis lebih banyak di banding minggu sebelumnya
           </p>
           <Link href="/">
-            <button style={{
+            <button className="font-playfair" style={{
               backgroundColor: '#1A5C40',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: '12px',
               padding: '13px 32px',
-              fontSize: '0.9375rem',
+              fontSize: '1.125rem',
               fontWeight: 700,
               cursor: 'pointer',
               fontFamily: 'inherit',
@@ -100,16 +119,16 @@ export default function ProgresPage() {
         <div style={{
           background: 'linear-gradient(135deg, #1A5C40 0%, #0D3D2A 100%)',
           borderRadius: '16px',
-          margin: '0 16px 20px',
-          padding: '20px',
+          margin: '0 16px 28px',
+          padding: '36px',
           color: '#FFFFFF',
         }}>
           <div style={{
-            backgroundColor: 'rgba(255,255,255,0.15)',
+            backgroundColor: '064E3B',
             borderRadius: '9999px',
             display: 'inline-block',
             padding: '2px 10px',
-            fontSize: '0.75rem',
+            fontSize: '1rem',
             fontWeight: 700,
             marginBottom: '10px',
           }}>
@@ -118,7 +137,7 @@ export default function ProgresPage() {
           <p style={{ fontSize: '1rem', fontWeight: 600, lineHeight: 1.6, marginBottom: '8px', fontStyle: 'italic' }}>
             &ldquo;Sebaik-baiknya di antara kalian adalah yang mempelajari Al-Quran dan mengajarkannya&rdquo;
           </p>
-          <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.65)' }}>— Sahih al-Bukhari</p>
+          <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.65)' }}>— Sahih al-Bukhari</p>
         </div>
 
         {/* Stats */}
@@ -128,14 +147,14 @@ export default function ProgresPage() {
               {s.icon}
             </div>
             <div>
-              <p style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: 500 }}>{s.label}</p>
-              <p style={{ fontSize: '1.125rem', fontWeight: 800, color: '#1A1A1A' }}>{s.value}</p>
+              <p style={{ fontSize: '0.9rem', color: '#9CA3AF', fontWeight: 500 }}>{s.label}</p>
+              <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1A1A1A' }}>{s.value}</p>
             </div>
           </div>
         ))}
 
         {/* Recent Activity */}
-        <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#1A1A1A', padding: '16px 16px 10px' }}>
+        <h3 className="font-playfair" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#064E3B', padding: '16px 16px 10px' }}>
           Aktivitas Terbaru
         </h3>
 
@@ -144,7 +163,7 @@ export default function ProgresPage() {
             backgroundColor: '#FFFFFF',
             borderRadius: '14px',
             margin: '0 16px 10px',
-            padding: '14px 16px',
+            padding: '32px',
             display: 'flex',
             alignItems: 'center',
             gap: '14px',
@@ -167,12 +186,13 @@ export default function ProgresPage() {
               </svg>
             </div>
             <div>
-              <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A' }}>{act.title}</p>
-              <p style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>{act.desc}</p>
+              <p className="font-playfair" style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1a1a1a' }}>{act.title}</p>
+              <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>{act.desc}</p>
             </div>
           </div>
         ))}
       </div>
+      </main>
     </>
   );
 }

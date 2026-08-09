@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const settingsSections = [
   {
@@ -94,16 +95,42 @@ const settingsSections = [
 export default function SettingsPage() {
   const [showDangerConfirm, setShowDangerConfirm] = useState(false);
 
+  const router = useRouter();
+
   return (
     <>
-      {/* Header */}
-      <div style={{ padding: '20px 16px 12px', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1A5C40', letterSpacing: '-0.02em' }}>
+      {/* App Header */}
+      <header
+        style={{
+          backgroundColor: "#FFFFFF",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+          padding: "12px 16px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <h1
+          className="font-playfair"
+          style={{
+            margin: 0,
+            fontSize: "1.75rem",
+            fontWeight: 900,
+            color: "#1A5C40",
+            lineHeight: 1,
+          }}
+        >
           DengarBain
         </h1>
-      </div>
+      </header>
 
-      <div style={{ paddingTop: '8px' }}>
+      <main
+        style={{
+          paddingTop: 20,
+        }}
+      >
+
+        <div style={{ paddingTop: '8px' }}>
         {settingsSections.map((section) => (
           <div key={section.label}>
             <p className="settings-section-label" style={{ color: section.labelColor || '#9CA3AF' }}>
@@ -121,7 +148,27 @@ export default function SettingsPage() {
                     borderBottom: idx < section.items.length - 1 ? '1px solid #F0F0EA' : 'none',
                   }}
                   onClick={() => {
-                    if (item.danger) setShowDangerConfirm(true);
+                    switch (item.id) {
+                      case 'bantuan':
+                        router.push('/settings/help');
+                        break;
+
+                      case 'penyimpanan-lokal':
+                        router.push('/settings/storage');
+                        break;
+
+                      case 'unduh-aplikasi':
+                        router.push('/settings/download');
+                        break;
+
+                      case 'tentang':
+                        router.push('/settings/about');
+                        break;
+
+                      case 'hapus-progres':
+                        setShowDangerConfirm(true);
+                        break;
+                    }
                   }}
                 >
                   {/* Icon */}
@@ -163,7 +210,7 @@ export default function SettingsPage() {
       </div>
 
       {/* App version footer */}
-      <div style={{ textAlign: 'center', padding: '24px 16px', color: '#D1D5DB' }}>
+      <div style={{ textAlign: 'center', padding: '24px 16px', color: '#b8bcc2' }}>
         <p style={{ fontSize: '0.75rem' }}>DengarBain v1.0.0</p>
         <p style={{ fontSize: '0.6875rem', marginTop: '4px' }}>© 2025 DengarBain. Semua hak dilindungi.</p>
       </div>
@@ -235,6 +282,8 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
+      
+      </main>
     </>
   );
 }

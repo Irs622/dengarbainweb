@@ -53,7 +53,7 @@ export default function HomePage() {
       <div className="search-bar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <circle cx="11" cy="11" r="8" stroke="#9CA3AF" strokeWidth="2"/>
-          <path d="m21 21-4.35-4.35" stroke="#D1FAE5" strokeWidth="2" strokeLinecap="round"/>
+          <path d="m21 21-4.35-4.35" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round"/>
         </svg>
         <input
           type="search"
