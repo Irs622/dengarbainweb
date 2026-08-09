@@ -16,20 +16,44 @@ export default function HomePage() {
   return (
     <>
       {/* App Header */}
-      <div style={{
-        padding: '20px 16px 12px',
-        textAlign: 'center',
-      }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1A5C40', letterSpacing: '-0.02em' }}>
+      <header
+        style={{
+          backgroundColor: "#FFFFFF",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+          padding: "12px 16px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <h1
+          className="font-playfair"
+          style={{
+            margin: 0,
+            fontSize: "1.75rem",
+            fontWeight: 900,
+            color: "#1A5C40",
+            lineHeight: 1,
+          }}
+        >
           DengarBain
         </h1>
-      </div>
+      </header>
 
-      {/* Search bar */}
+
+
+      {/* Wrapper untuk main content */}
+      <main
+        style={{
+          paddingTop: 32,
+        }}
+      >
+
+        {/* Search bar */}
       <div className="search-bar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <circle cx="11" cy="11" r="8" stroke="#9CA3AF" strokeWidth="2"/>
-          <path d="m21 21-4.35-4.35" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round"/>
+          <path d="m21 21-4.35-4.35" stroke="#D1FAE5" strokeWidth="2" strokeLinecap="round"/>
         </svg>
         <input
           type="search"
@@ -51,7 +75,7 @@ export default function HomePage() {
       {!search && (
         <>
           <div style={{ padding: '0 16px 4px' }}>
-            <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: '#1A1A1A', marginBottom: '12px' }}>
+            <h2 className="font-playfair" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#064E3B', marginBottom: '12px' }}>
               Lanjut Belajar
             </h2>
           </div>
@@ -61,28 +85,9 @@ export default function HomePage() {
 
       {/* Hadis List */}
       <div className="section-header">
-        <h2 className="section-title">
+        <h2 className="font-playfair" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#064E3B', marginBottom: '12px' }}>
           {search ? `Hasil "${search}"` : 'Semua Hadis'}
         </h2>
-        {!search && (
-          <button style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '0.8125rem',
-            fontWeight: 600,
-            color: '#6B7280',
-            fontFamily: 'inherit',
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-            Filter
-          </button>
-        )}
       </div>
 
       {/* Hadis cards */}
@@ -114,6 +119,10 @@ export default function HomePage() {
           <p style={{ fontSize: '0.9rem' }}>Hadis tidak ditemukan</p>
         </div>
       )}
+
+
+      </main>
+
     </>
   );
 }

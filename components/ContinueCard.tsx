@@ -12,38 +12,38 @@ export default function ContinueCard({ hadis }: ContinueCardProps) {
         {/* Top tag */}
         <div style={{
           display: 'inline-flex',
-          alignItems: 'center',
-          gap: '6px',
-          backgroundColor: 'rgba(255,255,255,0.15)',
+          alignItems: 'left',
+          backgroundColor: '#064E3B',
+          gap : '6px',
           borderRadius: '9999px',
-          padding: '4px 12px',
           marginBottom: '12px',
         }}>
           <span style={{
-            backgroundColor: '#4ADE80',
-            width: '18px',
-            height: '18px',
-            borderRadius: '50%',
+            backgroundColor: '#C3ECD733',
+            width: '36px',
+            height: '16px',
+            borderRadius: '9999px',
             fontSize: '0.625rem',
             fontWeight: 700,
-            color: '#1A1A1A',
+            color: '#C3ECD7',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}>#{hadis.id}</span>
-          <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.85)', fontWeight: 500 }}>
+          <span style={{ fontSize: '0.7rem', color: '#C3ECD7' ,height: '16px', fontWeight: 600, alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
             Lanjutkan terakhir dibuka
           </span>
         </div>
 
         {/* Title & play button row */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '12px' }}>
-          <h2 style={{
-            fontSize: '1.25rem',
+          <h2 className="font-playfair" style={{
+            fontSize: '1.5rem',
             fontWeight: 800,
             color: '#FFFFFF',
             lineHeight: 1.25,
             flex: 1,
+            maxWidth: '250px'
           }}>
             {hadis.judul}
           </h2>
@@ -51,6 +51,7 @@ export default function ContinueCard({ hadis }: ContinueCardProps) {
           <div style={{
             width: '44px',
             height: '44px',
+            marginBottom: '20px',
             borderRadius: '50%',
             backgroundColor: 'rgba(255,255,255,0.2)',
             display: 'flex',
@@ -67,7 +68,7 @@ export default function ContinueCard({ hadis }: ContinueCardProps) {
 
         {/* Quote */}
         <p style={{
-          fontSize: '0.8125rem',
+          fontSize: '1rem',
           color: 'rgba(255,255,255,0.75)',
           fontStyle: 'italic',
           lineHeight: 1.6,
@@ -78,9 +79,9 @@ export default function ContinueCard({ hadis }: ContinueCardProps) {
 
         {/* Progress bar */}
         <div style={{
-          height: '4px',
+          height: '6px',
           backgroundColor: 'rgba(255,255,255,0.2)',
-          borderRadius: '9999px',
+          borderRadius: '9999px'
         }}>
           <div style={{
             height: '100%',
@@ -93,7 +94,7 @@ export default function ContinueCard({ hadis }: ContinueCardProps) {
         <p style={{
           fontSize: '0.6875rem',
           color: 'rgba(255,255,255,0.6)',
-          marginTop: '6px',
+          marginTop: '16px',
         }}>
           {hadis.sumber}
         </p>
