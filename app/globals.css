@@ -70,7 +70,7 @@ button { font-family: inherit; }
 .page-content {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 80px;
+  padding-bottom: 0px;
 }
 
 /* Arabic text */
