@@ -7,8 +7,8 @@ interface CircularProgressProps {
 
 export default function CircularProgress({
   percent,
-  size = 140,
-  strokeWidth = 12,
+  size = 180,
+  strokeWidth = 18,
   label = 'PROGRES',
 }: CircularProgressProps) {
   const radius = (size - strokeWidth) / 2;
@@ -50,10 +50,10 @@ export default function CircularProgress({
       </svg>
       {/* Center text */}
       <div style={{ textAlign: 'center', zIndex: 1 }}>
-        <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1A5C40', lineHeight: 1 }}>
+        <div style={{ fontSize: '2.25rem', fontWeight: 800, color: '#1A5C40', lineHeight: 1 }}>
           {percent}%
         </div>
-        <div style={{ fontSize: '0.625rem', fontWeight: 700, color: '#9CA3AF', letterSpacing: '0.1em', marginTop: '2px' }}>
+        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#9CA3AF', letterSpacing: '0.1em', marginTop: '2px' }}>
           {label}
         </div>
       </div>
