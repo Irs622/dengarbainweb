@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const navItems = [
   {
-    href: '/',
+    href: '/hadis',
     label: 'Hadis',
     activeColor: '#1A5C40',
     icon: (active: boolean) => (
@@ -60,6 +60,8 @@ const navItems = [
 export default function BottomNav() {
   const pathname = usePathname();
 
+  if (pathname === '/' || pathname === '/welcome') return null;
+
   return (
     <nav style={{
       position: 'sticky',
@@ -76,8 +78,7 @@ export default function BottomNav() {
       boxShadow: '0 -4px 20px rgba(0,0,0,0.06)',
     }}>
       {navItems.map((item) => {
-        const isActive = pathname === item.href ||
-          (item.href !== '/' && pathname.startsWith(item.href));
+        const isActive = pathname.startsWith(item.href);
         return (
           <Link
             key={item.href}

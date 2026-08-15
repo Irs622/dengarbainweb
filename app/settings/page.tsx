@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import AppHeader from '@/components/AppHeader';
+import { useProgress } from '@/context/ProgressContext';
 
 const settingsSections = [
   {
@@ -93,36 +95,13 @@ const settingsSections = [
 ];
 
 export default function SettingsPage() {
+  const { resetAllProgress } = useProgress();
   const [showDangerConfirm, setShowDangerConfirm] = useState(false);
-
   const router = useRouter();
 
   return (
     <>
-      {/* App Header */}
-      <header
-        style={{
-          backgroundColor: "#FFFFFF",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-          padding: "12px 16px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <h1
-          className="font-playfair"
-          style={{
-            margin: 0,
-            fontSize: "1.75rem",
-            fontWeight: 900,
-            color: "#1A5C40",
-            lineHeight: 1,
-          }}
-        >
-          DengarBain
-        </h1>
-      </header>
+      <AppHeader />
 
       <main
         style={{
@@ -270,7 +249,10 @@ export default function SettingsPage() {
                 }}
               >Batal</button>
               <button
-                onClick={() => setShowDangerConfirm(false)}
+                onClick={() => {
+                  resetAllProgress();
+                  setShowDangerConfirm(false);
+                }}
                 style={{
                   flex: 1, padding: '12px', borderRadius: '12px',
                   border: 'none', background: '#DC2626',
