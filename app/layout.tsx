@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import BottomNav from '@/components/BottomNav';
+import { ProgressProvider } from '@/context/ProgressContext';
 
 export const metadata: Metadata = {
   title: 'DengarBain – Belajar Hadis Arbain Tunanetra',
@@ -25,20 +26,22 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
-        <div className="app-shell">
-          {/* TalkBack Live Region Announcement for Screen Readers (NFR-ACC-04) */}
-          <div 
-            id="accessibility-announcer" 
-            className="sr-only" 
-            aria-live="polite" 
-            aria-atomic="true"
-          />
-          
-          <main className="page-content" id="main-content">
-            {children}
-          </main>
-          <BottomNav />
-        </div>
+        <ProgressProvider>
+          <div className="app-shell">
+            {/* TalkBack Live Region Announcement for Screen Readers (NFR-ACC-04) */}
+            <div 
+              id="accessibility-announcer" 
+              className="sr-only" 
+              aria-live="polite" 
+              aria-atomic="true"
+            />
+            
+            <main className="page-content" id="main-content">
+              {children}
+            </main>
+            <BottomNav />
+          </div>
+        </ProgressProvider>
       </body>
     </html>
   );

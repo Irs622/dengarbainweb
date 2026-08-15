@@ -63,7 +63,7 @@ export default function WelcomePage() {
           </div>
 
           {/* Get Started Button */}
-          <Link href="/hadis" style={{ width: '100%', maxWidth: 330, textDecoration: 'none' }}>
+          <Link href="/" style={{ width: '100%', maxWidth: 330, textDecoration: 'none' }}>
             <button
               style={{
                 width: '100%',
