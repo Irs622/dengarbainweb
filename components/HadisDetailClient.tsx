@@ -126,7 +126,7 @@ export default function HadisDetailClient({ hadisId }: HadisDetailClientProps) {
           borderLeftWidth: '4px',
           borderLeftColor: '#1A5C40',
         }}>
-          <p className="arabic-text">
+          <p className="arabic-text" lang="ar" dir="rtl">
             {hadis.arab}
           </p>
         </div>
@@ -163,7 +163,7 @@ export default function HadisDetailClient({ hadisId }: HadisDetailClientProps) {
           <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '10px' }}>
             Terjemahan
           </h3>
-          <p style={{ fontSize: '0.875rem', color: '#3D3D3D', lineHeight: 1.8, marginBottom: '16px' }}>
+          <p lang="id" style={{ fontSize: '0.875rem', color: '#3D3D3D', lineHeight: 1.8, marginBottom: '16px' }}>
             {hadis.terjemahan}
           </p>
           <div style={{
