@@ -136,12 +136,20 @@ button { font-family: inherit; }
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--clr-accent);
+  background: var(--clr-primary-mid);
   color: var(--clr-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.header-logo-icon img {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+  display: block;
 }
 
 .header-title {
