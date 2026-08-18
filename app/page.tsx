@@ -13,19 +13,26 @@ export default function WelcomePage() {
         {/* Top & Middle Content Box */}
         <div style={{ padding: '60px 24px 180px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '400px', margin: 'auto', zIndex: 10 }}>
           
-          {/* Logo & Arabic Badge */}
-          <div style={{ width: 128, height: 160, marginBottom: 24, position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <div style={{ width: 128, height: 128, background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.05) 100%)', boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25)', borderRadius: 28, border: '1px solid rgba(255, 255, 255, 0.25)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" fill="#FFFFFF" />
-              </svg>
-            </div>
-            
-            {/* Arabic Badge ٤٠ */}
-            <div style={{ width: 48, height: 48, position: 'absolute', right: -6, bottom: 12, background: '#FFFFFF', boxShadow: '0px 8px 10px -6px rgba(0, 0, 0, 0.10), 0px 20px 25px -5px rgba(0, 0, 0, 0.10)', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <span className="font-arabic" style={{ color: '#2D6A5A', fontSize: 20, fontWeight: '700', lineHeight: 1 }}>٤٠</span>
-            </div>
-          </div>
+          {/* DengarBain Primary Logo */}
+        <div
+          style={{
+            width: 220,
+            marginBottom: 16,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <img
+            src="/brand/dengarbain-primary.png"
+            alt="DengarBain"
+            style={{
+              width: '100%',
+              height: 'auto',
+              display: 'block',
+            }}
+          />
+        </div>
 
           {/* App Title */}
           <div style={{ marginBottom: 12, textAlign: 'center' }}>

@@ -36,14 +36,11 @@ export default function AppHeader({
         <div className="header-top-row">
           <div className="header-brand">
             <div className="header-logo-icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5z"
-                  fill="currentColor"
-                />
-                <circle cx="12" cy="12" r="2.5" fill="#FFFFFF" />
-              </svg>
-            </div>
+            <img
+              src="/brand/dengarbain-secondary.png"
+              alt=""
+            />
+          </div>
             <h1 className="header-title font-playfair">{title}</h1>
           </div>
           

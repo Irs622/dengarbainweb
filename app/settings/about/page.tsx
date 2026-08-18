@@ -60,58 +60,26 @@ export default function DownloadPage() {
               marginBottom: "28px",
             }}
           >
-            {/* App Logo */}
-            <div
-              style={{
-                position: "relative",
-                width: "130px",
-                height: "130px",
-                borderRadius: "28px",
-                backgroundColor: "#FFFFFF",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <span
-                className="font-playfair"
-                style={{
-                  fontSize: "3rem",
-                  fontWeight: 900,
-                  color: "#00543F",
-                }}
-              >
-                د
-              </span>
-
-              {/* Small Badge */}
-              <div
-                style={{
-                  position: "absolute",
-                  right: "-10px",
-                  bottom: "-10px",
-                  width: "48px",
-                  height: "48px",
-                  borderRadius: "50%",
-                  backgroundColor: "#FFFFFF",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
-                }}
-              >
-                <span
-                  style={{
-                    color: "#1A5C40",
-                    fontSize: "1.15rem",
-                    fontWeight: 700,
-                  }}
-                >
-                  ‹
-                </span>
-              </div>
-            </div>
+            {/* DengarBain Primary Logo */}
+        <div
+          style={{
+            width: 220,
+            marginBottom: -32,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <img
+            src="/brand/dengarbain-primary.png"
+            alt="DengarBain"
+            style={{
+              width: '100%',
+              height: 'auto',
+              display: 'block',
+            }}
+          />
+        </div>
 
             {/* App Name */}
             <h2
