@@ -4,17 +4,10 @@
 
 ---
 
-## 📸 Screenshots & Demo
+## 🚧 Status Proyek & Demo
 
-*(Tambahkan GIF interaksi aplikasi atau video singkat cara navigasi suara bekerja)*
-
-<p align="center">
-  <img src="./screenshots/landing-page.png" width="30%" alt="Halaman Utama DengarBain">
-  <img src="./screenshots/mobile-view.png" width="30%" alt="Tampilan Mobile DengarBain">
-  <img src="./screenshots/voice-navigation.png" width="30%" alt="Interaksi Suara DengarBain">
-</p>
-
-[**🚀 Coba Live Demo DengarBain**](https://link-demo-anda.com) *(Ganti dengan link asli)*
+> **Status:** `In Active Development` 🛠️  
+> Proyek ini sedang dalam tahap pengembangan intensif, pengujian aksesibilitas (*screen reader*), dan persiapan *deployment*. Tautan *live demo* serta dokumentasi visual (*screenshots* & demo suara) akan diperbarui segera setelah tahap rilis produksi selesai.
 
 ---
 
