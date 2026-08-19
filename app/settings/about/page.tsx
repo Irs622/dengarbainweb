@@ -346,7 +346,7 @@ export default function DownloadPage() {
             </p>
 
             <Link
-              href="/license"
+              href="/settings/about/license"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -392,7 +392,7 @@ export default function DownloadPage() {
 
           {/* Privacy Policy */}
           <Link
-            href="/privacy"
+            href="/settings/about/privacy"
             style={{
               width: "100%",
               height: "64px",
@@ -466,7 +466,7 @@ export default function DownloadPage() {
 
           {/* Terms of Service */}
           <Link
-            href="/terms"
+            href="/settings/about/terms"
             style={{
               width: "100%",
               height: "64px",
