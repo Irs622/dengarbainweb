@@ -41,7 +41,7 @@ export default function WelcomePage() {
 
           {/* Subtitle */}
           <div style={{ marginBottom: 28, textAlign: 'center', maxWidth: 320 }}>
-            <p style={{ color: 'rgba(255, 255, 255, 0.80)', fontSize: 16, fontFamily: 'Inter, sans-serif', fontWeight: '400', lineHeight: '26px', margin: 0 }}>
+            <p style={{ color: 'rgba(255, 255, 255, 0.80)', fontSize: 16, fontWeight: '400', lineHeight: '26px', margin: 0 }}>
               40 Hadis Pilihan untuk Kehidupan Sehari hari
             </p>
           </div>
@@ -51,7 +51,7 @@ export default function WelcomePage() {
             <div className="font-arabic" style={{ color: 'rgba(255, 255, 255, 0.90)', fontSize: 20, fontWeight: '400', lineHeight: '32.50px', marginBottom: 12 }}>
               طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ
             </div>
-            <div style={{ color: 'white', fontSize: 14, fontFamily: 'Inter, sans-serif', fontWeight: '400', lineHeight: '20px' }}>
+            <div style={{ color: 'white', fontSize: 14, fontWeight: '400', lineHeight: '20px' }}>
               &quot;Menuntut ilmu adalah kewajiban bagi setiap Muslim&quot;
             </div>
           </div>
@@ -81,7 +81,6 @@ export default function WelcomePage() {
                 border: 'none',
                 color: 'white',
                 fontSize: 16,
-                fontFamily: 'Inter, sans-serif',
                 fontWeight: '600',
                 lineHeight: '24px',
                 cursor: 'pointer',
