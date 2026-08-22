@@ -42,7 +42,7 @@ export default function WelcomePage() {
           {/* Subtitle */}
           <div style={{ marginBottom: 28, textAlign: 'center', maxWidth: 320 }}>
             <p style={{ color: 'rgba(255, 255, 255, 0.80)', fontSize: 16, fontFamily: 'Inter, sans-serif', fontWeight: '400', lineHeight: '26px', margin: 0 }}>
-              40 Hadis Pilihan untuk Kehidupan Sehari hari
+              42 Hadis Pilihan untuk Kehidupan Sehari-hari
             </p>
           </div>
 

@@ -12,6 +12,7 @@ const PRECACHE_URLS = [
   '/manifest.json',
   '/brand/dengarbain-primary.png',
   '/brand/dengarbain-secondary.png',
+  '/images/menguasai-dengarbain.png',
 ];
 
 // 1. Install Event: Pre-cache critical routes and assets

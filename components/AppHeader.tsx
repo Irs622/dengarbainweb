@@ -65,7 +65,7 @@ export default function AppHeader({
           </div>
 
           <div className="header-badge">
-            <span>40 HADIS</span>
+            <span>42 HADIS</span>
           </div>
         </div>
 
