@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useProgress } from '@/context/ProgressContext';
 
 interface AudioPlayerProps {
@@ -17,17 +17,12 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
   const [currentTime, setCurrentTime] = useState(0);
   const [audioDuration, setAudioDuration] = useState<number>(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
-  
-  // A-B Looping state
-  const [pointA, setPointA] = useState<number | null>(null);
-  const [pointB, setPointB] = useState<number | null>(null);
-  const [isABLoopActive, setIsABLoopActive] = useState<boolean>(false);
   const [showSpeedMenu, setShowSpeedMenu] = useState<boolean>(false);
   const [announcement, setAnnouncement] = useState<string>('');
 
   const speeds = [0.75, 1.0, 1.25, 1.5];
 
-  // Convert duration "MM:SS" string to total seconds
+  // Convert duration "MM:SS" string to total seconds as fallback
   const parseTotalSeconds = (durStr: string) => {
     const parts = durStr.split(':').map(Number);
     if (parts.length === 2) return parts[0] * 60 + parts[1];
@@ -37,7 +32,7 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
   const fallbackDuration = parseTotalSeconds(duration);
   const totalDuration = audioDuration > 0 ? audioDuration : fallbackDuration;
 
-  // File paths for audio
+  // File paths for audio (.wav and .mp3)
   const paddedId = String(hadisId || 1).padStart(2, '0');
   const audioSrcWav = `/audio/hadis/hadis-${paddedId}.wav`;
   const audioSrcMp3 = `/audio/hadis/hadis-${paddedId}.mp3`;
@@ -56,21 +51,13 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
     }
   };
 
-  // Handle time update and A-B looping logic
+  // Handle time update
   const handleTimeUpdate = () => {
     if (!audioRef.current) return;
-    const cur = audioRef.current.currentTime;
-    setCurrentTime(cur);
-
-    // A-B Loop check
-    if (isABLoopActive && pointA !== null && pointB !== null && pointB > pointA) {
-      if (cur >= pointB) {
-        audioRef.current.currentTime = pointA;
-        setCurrentTime(pointA);
-      }
-    }
+    setCurrentTime(audioRef.current.currentTime);
   };
 
+  // Keep addLearningSeconds reference stable
   const addLearningSecondsRef = useRef(addLearningSeconds);
   useEffect(() => {
     addLearningSecondsRef.current = addLearningSeconds;
@@ -104,7 +91,6 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
       }
     } catch (err) {
       console.warn('Gagal memutar audio:', err);
-      // Fallback state if audio play is blocked
       setIsPlaying(!isPlaying);
     }
   };
@@ -142,44 +128,7 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
     setAnnouncement(`Kecepatan audio diatur ke ${speed} kali`);
   };
 
-  // A-B Looping Set Point A
-  const handleSetPointA = () => {
-    const cur = audioRef.current ? audioRef.current.currentTime : currentTime;
-    setPointA(cur);
-    setAnnouncement(`Titik awal A diatur pada menit ${formatTime(cur)}`);
-    if (pointB !== null && cur >= pointB) {
-      setPointB(null);
-      setIsABLoopActive(false);
-    }
-  };
-
-  // A-B Looping Set Point B
-  const handleSetPointB = () => {
-    const cur = audioRef.current ? audioRef.current.currentTime : currentTime;
-    if (pointA === null) {
-      setAnnouncement('Silakan atur Titik A terlebih dahulu');
-      return;
-    }
-    if (cur <= pointA) {
-      setAnnouncement('Titik B harus berada setelah Titik A');
-      return;
-    }
-    setPointB(cur);
-    setIsABLoopActive(true);
-    setAnnouncement(`Titik akhir B diatur pada menit ${formatTime(cur)}. Mode A-B Loop aktif.`);
-  };
-
-  // Reset A-B Loop
-  const handleResetLoop = () => {
-    setPointA(null);
-    setPointB(null);
-    setIsABLoopActive(false);
-    setAnnouncement('Pengulangan A-B dimatikan');
-  };
-
   const progressPercent = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
-  const pointAPercent = pointA !== null && totalDuration > 0 ? (pointA / totalDuration) * 100 : null;
-  const pointBPercent = pointB !== null && totalDuration > 0 ? (pointB / totalDuration) * 100 : null;
 
   return (
     <div
@@ -214,7 +163,7 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
       )}
 
       {/* Time Display & Speed Tag */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
         <span style={{ fontSize: '0.8125rem', opacity: 0.9, fontWeight: 700 }}>
           {formatTime(currentTime)} / {formatTime(totalDuration)}
         </span>
@@ -228,7 +177,7 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
               backgroundColor: 'rgba(255,255,255,0.2)',
               border: '1px solid rgba(255,255,255,0.35)',
               borderRadius: '12px',
-              padding: '3px 10px',
+              padding: '4px 12px',
               color: '#FFFFFF',
               fontSize: '0.75rem',
               fontWeight: 800,
@@ -282,7 +231,7 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
         </div>
       </div>
 
-      {/* Interactive Progress Bar with A-B Marker Overlays */}
+      {/* Interactive Progress Bar */}
       <div
         ref={barRef}
         onClick={handleBarClick}
@@ -290,7 +239,7 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
           height: '8px',
           backgroundColor: 'rgba(255,255,255,0.25)',
           borderRadius: '9999px',
-          marginBottom: '16px',
+          marginBottom: '18px',
           cursor: 'pointer',
           position: 'relative',
         }}
@@ -324,44 +273,10 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
             }}
           />
         </div>
-
-        {/* Marker Point A */}
-        {pointAPercent !== null && (
-          <div
-            title={`Titik A: ${formatTime(pointA!)}`}
-            style={{
-              position: 'absolute',
-              left: `${pointAPercent}%`,
-              top: '-4px',
-              width: '4px',
-              height: '16px',
-              backgroundColor: '#FDE047',
-              borderRadius: '2px',
-              zIndex: 5,
-            }}
-          />
-        )}
-
-        {/* Marker Point B */}
-        {pointBPercent !== null && (
-          <div
-            title={`Titik B: ${formatTime(pointB!)}`}
-            style={{
-              position: 'absolute',
-              left: `${pointBPercent}%`,
-              top: '-4px',
-              width: '4px',
-              height: '16px',
-              backgroundColor: '#F87171',
-              borderRadius: '2px',
-              zIndex: 5,
-            }}
-          />
-        )}
       </div>
 
       {/* Main Playback Controls */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Restart from beginning */}
         <button
           type="button"
@@ -458,84 +373,6 @@ export default function AudioPlayer({ duration, hadisId }: AudioPlayerProps) {
             <rect x="5" y="5" width="14" height="14" rx="2" />
           </svg>
         </button>
-      </div>
-
-      {/* A-B Looping Section for Hafalan */}
-      <div
-        style={{
-          borderTop: '1px solid rgba(255,255,255,0.18)',
-          paddingTop: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '8px',
-        }}
-      >
-        <span style={{ fontSize: '0.75rem', fontWeight: 700, opacity: 0.9 }}>
-          Pengulangan Hafalan (A-B Loop):
-        </span>
-
-        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-          {/* Set A */}
-          <button
-            type="button"
-            onClick={handleSetPointA}
-            style={{
-              backgroundColor: pointA !== null ? '#FDE047' : 'rgba(255,255,255,0.2)',
-              color: pointA !== null ? '#78350F' : '#FFFFFF',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '4px 10px',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              cursor: 'pointer',
-            }}
-            aria-label={pointA !== null ? `Titik A aktif di ${formatTime(pointA)}` : 'Tandai Titik Awal (Titik A)'}
-          >
-            {pointA !== null ? `A: ${formatTime(pointA)}` : 'Tandai A'}
-          </button>
-
-          {/* Set B */}
-          <button
-            type="button"
-            onClick={handleSetPointB}
-            style={{
-              backgroundColor: pointB !== null ? '#F87171' : 'rgba(255,255,255,0.2)',
-              color: pointB !== null ? '#FFFFFF' : '#FFFFFF',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '4px 10px',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              cursor: 'pointer',
-            }}
-            aria-label={pointB !== null ? `Titik B aktif di ${formatTime(pointB)}` : 'Tandai Titik Akhir (Titik B)'}
-          >
-            {pointB !== null ? `B: ${formatTime(pointB)}` : 'Tandai B'}
-          </button>
-
-          {/* Reset Loop */}
-          {(pointA !== null || pointB !== null) && (
-            <button
-              type="button"
-              onClick={handleResetLoop}
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.15)',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '4px 8px',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}
-              aria-label="Hapus Pengulangan A-B"
-            >
-              Reset Loop
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );
