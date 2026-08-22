@@ -54,6 +54,7 @@ Berikut adalah rincian teknologi yang digunakan dan alasan teknikal di balik pem
 | **PWA & Offline Core** | **Service Worker (`public/sw.js`)** | Cache v2 (`dengarbain-cache-v2`) dengan strategi *Cache-First* untuk 42 berkas audio `.wav`, *Pre-caching* rute utama, dan *Stale-While-Revalidate* untuk aset statis. |
 | **Penyimpanan Lokal (Client)** | **IndexedDB & LocalStorage (`lib/db.ts`)** | *Dual-Storage Helper* untuk menyimpan status 42 hadis (`hafal`, `sedang`, `belum`), stempel waktu belajar, streak harian, dan 15 riwayat aktivitas terbaru. |
 | **Audio Engine** | **HTML5 Audio & Web APIs** | Mengendalikan pemutaran 42 berkas audio `.wav`, tombol lompat mundur 10 detik, maju 10 detik, restart awal, dan pengatur kecepatan (0.75x, 1.0x, 1.25x, 1.5x). |
+| **AI Speech Synthesis** | **[SILMA Arabic TTS v1](https://github.com/SILMA-AI/silma-tts)** | Model *Text-to-Speech* bilingual bahasa Arab 150M parameter berbasis arsitektur difusi F5-TTS dengan dukungan penuh diakritik tajwid (*Tashkeel*) untuk menyintesis 42 audio hadis. |
 | **Deployment Platform** | **Vercel Cloud Platform** | Hosting global berkecepatan tinggi dengan edge CDN, SSL/HTTPS otomatis untuk PWA, dan continuous deployment dari branch `production`. |
 
 ---
@@ -192,5 +193,15 @@ Kami sangat menyambut partisipasi dan kontribusi dari komunitas pengembang:
 
 ---
 
+## 🙏 Ucapan Terima Kasih & Atribusi Teknologi (Acknowledgements)
+
+Proyek **DengarBain** mengapresiasi dan berterima kasih kepada komunitas open-source serta pengembang teknologi AI pendukung:
+- **[SILMA AI](https://silma.ai/)** — Atas pengembangan model terbuka **[SILMA Arabic TTS v1](https://github.com/SILMA-AI/silma-tts)** (berbasis F5-TTS Diffusion) yang digunakan untuk menghasilkan 42 rekaman audio pelafalan teks Arab Hadis Arbain dengan tajwid dan diakritik harakat lengkap.
+- **[F5-TTS](https://github.com/SWivid/F5-TTS)** — Atas fondasi arsitektur *non-autoregressive flow-matching speech synthesis*.
+- **Komunitas Pesantren Sam'an** — Atas wawasan dan masukan kebutuhan nyata pembelajaran santri tunanetra.
+
+---
+
 ## 📄 Lisensi
 Proyek ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](LICENSE) untuk detail hak cipta lengkap.
+Audio disintesis menggunakan model SILMA Arabic TTS di bawah lisensi Apache 2.0.

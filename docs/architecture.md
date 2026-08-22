@@ -51,9 +51,10 @@ Aplikasi didesain tanpa *login screen*. Saat PWA pertama kali dibuka, sistem men
 ### 2.5. Manajemen Penyimpanan & 1-Click Bulk Cache
 Pengguna dapat memantau estimasi kapasitas memori peramban secara *real-time* via `navigator.storage.estimate()` di halaman `/settings/storage`, mengunduh seluruh 42 berkas audio dalam 1-klik, atau membersihkan cache audio kapan saja tanpa kehilangan catatan progres belajar di IndexedDB.
 
-## 3. Audio Delivery Pipeline
-- 42 File rekaman audio hadis berkualitas tinggi berformat `.wav` tersimpan di direktori `public/audio/hadis/`.
-- Didukung kontrol kecepatan pemutaran (0.75x, 1.0x, 1.25x, 1.5x), tombol lompat +/- 10 detik, dan pengumuman *screen reader* dinamis (`aria-live="polite"`).
+## 3. Audio Delivery Pipeline & Speech Synthesis
+- **Sintesis Suara AI (AI Voice Model)**: Seluruh 42 berkas audio pelafalan teks Arab Hadis Arbain disintesis menggunakan **[SILMA Arabic TTS v1](https://github.com/SILMA-AI/silma-tts)** (Model bilingual F5-TTS Diffusion 150M parameter dengan dukungan penuh tanda baca harakat/tashkeel).
+- **Format Berkas**: Berkas audio berformat `.wav` tersimpan statis di direktori `public/audio/hadis/` dan dilayani langsung oleh Vercel Edge CDN.
+- **Fitur Player**: Didukung kontrol kecepatan pemutaran dinamis (0.75x, 1.0x, 1.25x, 1.5x), tombol lompat +/- 10 detik, dan pengumuman *screen reader* dinamis (`aria-live="polite"`).
 
 ## 4. Production Deployment
 - **Platform**: Vercel Global Edge Network
