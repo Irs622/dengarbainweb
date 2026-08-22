@@ -1,10 +1,16 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { hadisData, Hadis, HadisStatus } from '@/data/hadis';
-import { db, ActivityRecord } from '@/lib/db';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { Hadis, HadisStatus, hadisData } from '@/data/hadis';
+import { db } from '@/lib/db';
 
-export type ActivityItem = ActivityRecord;
+export interface ActivityItem {
+  id: string;
+  hadisId: number;
+  title: string;
+  desc: string;
+  timestamp: string;
+}
 
 interface ProgressContextType {
   statuses: Record<number, HadisStatus>;
@@ -21,80 +27,122 @@ interface ProgressContextType {
   resetAllProgress: () => void;
 }
 
-const STORAGE_KEY_STATUSES = 'dengarbain_hadis_statuses_v2';
-const STORAGE_KEY_LAST_OPENED = 'dengarbain_last_opened_id_v2';
-const STORAGE_KEY_ACTIVITIES = 'dengarbain_activities_v2';
-const STORAGE_KEY_LEARNING_SECONDS = 'dengarbain_learning_seconds_v2';
-const STORAGE_KEY_ACTIVE_DATES = 'dengarbain_active_dates_v2';
-
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
 
-function getTodayString(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
+const STORAGE_KEY_STATUSES = 'dengarbain_hadis_statuses';
+const STORAGE_KEY_LAST_OPENED = 'dengarbain_last_opened';
+const STORAGE_KEY_ACTIVITIES = 'dengarbain_activities';
+const STORAGE_KEY_LEARNING_SECONDS = 'dengarbain_learning_seconds';
+const STORAGE_KEY_ACTIVE_DATES = 'dengarbain_active_dates';
 
-function calculateStreak(dates: string[]): number {
-  if (!dates || dates.length === 0) return 0;
-  
-  const sorted = Array.from(new Set(dates)).sort().reverse();
-  const today = getTodayString();
-  const yesterdayDate = new Date();
-  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-  const yesterday = `${yesterdayDate.getFullYear()}-${String(yesterdayDate.getMonth() + 1).padStart(2, '0')}-${String(yesterdayDate.getDate()).padStart(2, '0')}`;
-
-  let streak = 0;
-  let checkDate = new Date();
-
-  // If active today or yesterday, count backwards
-  if (sorted.includes(today) || sorted.includes(yesterday)) {
-    if (!sorted.includes(today)) {
-      checkDate = yesterdayDate;
+export function ProgressProvider({ children }: { children: React.ReactNode }) {
+  const [statuses, setStatuses] = useState<Record<number, HadisStatus>>(() => {
+    if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.getItem === 'function') {
+      try {
+        const saved = window.localStorage.getItem(STORAGE_KEY_STATUSES);
+        if (saved) return JSON.parse(saved);
+      } catch (e) {
+        console.error('Failed to parse saved statuses from localStorage:', e);
+      }
     }
-    
-    while (true) {
-      const dateStr = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
-      if (sorted.includes(dateStr)) {
+    const defaultMap: Record<number, HadisStatus> = {};
+    hadisData.forEach((h) => {
+      defaultMap[h.id] = h.status;
+    });
+    return defaultMap;
+  });
+
+  const [lastOpenedHadisId, setLastOpenedHadisId] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.getItem === 'function') {
+      try {
+        const saved = window.localStorage.getItem(STORAGE_KEY_LAST_OPENED);
+        if (saved) return Number(saved);
+      } catch (e) {
+        console.error('Failed to parse last opened hadis:', e);
+      }
+    }
+    return 1;
+  });
+
+  const [activities, setActivities] = useState<ActivityItem[]>(() => {
+    if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.getItem === 'function') {
+      try {
+        const saved = window.localStorage.getItem(STORAGE_KEY_ACTIVITIES);
+        if (saved) return JSON.parse(saved);
+      } catch (e) {
+        console.error('Failed to parse activities from localStorage:', e);
+      }
+    }
+    return [];
+  });
+
+  const [learningSeconds, setLearningSeconds] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.getItem === 'function') {
+      try {
+        const saved = window.localStorage.getItem(STORAGE_KEY_LEARNING_SECONDS);
+        if (saved) return Number(saved);
+      } catch (e) {
+        console.error('Failed to parse learning seconds:', e);
+      }
+    }
+    return 0;
+  });
+
+  const [streakDays, setStreakDays] = useState<number>(1);
+
+  const getTodayString = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  };
+
+  const calculateStreak = (dates: string[]): number => {
+    if (!dates || dates.length === 0) return 1;
+    const sorted = [...new Set(dates)].sort().reverse();
+    let streak = 0;
+    const now = new Date();
+
+    for (let i = 0; i < sorted.length; i++) {
+      const checkDate = new Date(now);
+      checkDate.setDate(now.getDate() - i);
+      const expectedStr = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
+
+      if (sorted.includes(expectedStr)) {
         streak++;
-        checkDate.setDate(checkDate.getDate() - 1);
       } else {
+        if (i === 0) continue;
         break;
       }
     }
-  }
+    return Math.max(1, streak);
+  };
 
-  return Math.max(1, streak);
-}
-
-export function ProgressProvider({ children }: { children: React.ReactNode }) {
-  const [statuses, setStatuses] = useState<Record<number, HadisStatus>>({});
-  const [lastOpenedHadisId, setLastOpenedHadisId] = useState<number>(1);
-  const [activities, setActivities] = useState<ActivityItem[]>([]);
-  const [learningSeconds, setLearningSeconds] = useState<number>(0);
-  const [streakDays, setStreakDays] = useState<number>(1);
-
-  // Dual Storage Initializer: Load immediately from LocalStorage, verify & sync with IndexedDB in background
+  // Dual Storage Initialization & Sync
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const loadDualStorage = async () => {
       try {
+        const idbStatuses = await db.getAllHadisStatuses();
+        const idbActivities = await db.getActivities();
+        const idbLastOpened = await db.getAppState<number>(STORAGE_KEY_LAST_OPENED);
+        const idbSeconds = await db.getAppState<number>(STORAGE_KEY_LEARNING_SECONDS);
+        const idbDates = await db.getAppState<string[]>(STORAGE_KEY_ACTIVE_DATES);
+
         let currentStatuses: Record<number, HadisStatus> | null = null;
-        let currentLastOpened: number | null = null;
         let currentActivities: ActivityItem[] | null = null;
+        let currentLastOpened: number | null = null;
         let currentSeconds: number | null = null;
         let currentDates: string[] | null = null;
 
-        // 1. Fast initial load from LocalStorage
         if (window.localStorage && typeof window.localStorage.getItem === 'function') {
           const lsStatuses = window.localStorage.getItem(STORAGE_KEY_STATUSES);
           if (lsStatuses) currentStatuses = JSON.parse(lsStatuses);
 
+          const lsActivities = window.localStorage.getItem(STORAGE_KEY_ACTIVITIES);
+          if (lsActivities) currentActivities = JSON.parse(lsActivities);
+
           const lsLastOpened = window.localStorage.getItem(STORAGE_KEY_LAST_OPENED);
           if (lsLastOpened) currentLastOpened = Number(lsLastOpened);
-
-          const lsActs = window.localStorage.getItem(STORAGE_KEY_ACTIVITIES);
-          if (lsActs) currentActivities = JSON.parse(lsActs);
 
           const lsSeconds = window.localStorage.getItem(STORAGE_KEY_LEARNING_SECONDS);
           if (lsSeconds) currentSeconds = Number(lsSeconds);
@@ -103,32 +151,30 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           if (lsDates) currentDates = JSON.parse(lsDates);
         }
 
-        // 2. Check IndexedDB as durable source / backup
-        const idbStatuses = await db.getAllHadisStatuses();
-        const idbActivities = await db.getActivities();
-        const idbLastOpened = await db.getAppState<number>(STORAGE_KEY_LAST_OPENED);
-        const idbSeconds = await db.getAppState<number>(STORAGE_KEY_LEARNING_SECONDS);
-        const idbDates = await db.getAppState<string[]>(STORAGE_KEY_ACTIVE_DATES);
+        // Merge Statuses
+        const mergedStatuses: Record<number, HadisStatus> = {
+          ...idbStatuses,
+          ...(currentStatuses || {}),
+        };
 
-        // --- Merge Statuses ---
-        if (!currentStatuses || Object.keys(currentStatuses).length === 0) {
-          if (Object.keys(idbStatuses).length > 0) {
-            currentStatuses = idbStatuses;
-          } else {
-            const initialMap: Record<number, HadisStatus> = {};
-            hadisData.forEach((h) => {
-              initialMap[h.id] = h.status;
-            });
-            currentStatuses = initialMap;
+        if (Object.keys(mergedStatuses).length > 0) {
+          setStatuses((prev) => ({ ...prev, ...mergedStatuses }));
+          if (window.localStorage && typeof window.localStorage.setItem === 'function') {
+            window.localStorage.setItem(STORAGE_KEY_STATUSES, JSON.stringify(mergedStatuses));
+          }
+          await db.bulkSaveHadisStatus(mergedStatuses);
+        }
+
+        // Merge Activities
+        const mergedActivities = currentActivities && currentActivities.length > 0 ? currentActivities : idbActivities;
+        if (mergedActivities && mergedActivities.length > 0) {
+          setActivities(mergedActivities);
+          if (window.localStorage && typeof window.localStorage.setItem === 'function') {
+            window.localStorage.setItem(STORAGE_KEY_ACTIVITIES, JSON.stringify(mergedActivities));
           }
         }
-        setStatuses(currentStatuses);
-        db.bulkSaveHadisStatus(currentStatuses);
-        if (window.localStorage && typeof window.localStorage.setItem === 'function') {
-          window.localStorage.setItem(STORAGE_KEY_STATUSES, JSON.stringify(currentStatuses));
-        }
 
-        // --- Merge Last Opened ---
+        // Merge Last Opened
         if (!currentLastOpened && idbLastOpened) {
           currentLastOpened = idbLastOpened;
         }
@@ -137,19 +183,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           db.setAppState(STORAGE_KEY_LAST_OPENED, currentLastOpened);
         }
 
-        // --- Merge Activities ---
-        if ((!currentActivities || currentActivities.length === 0) && idbActivities.length > 0) {
-          currentActivities = idbActivities;
-        }
-        if (currentActivities) {
-          setActivities(currentActivities);
-          db.saveActivities(currentActivities);
-          if (window.localStorage && typeof window.localStorage.setItem === 'function') {
-            window.localStorage.setItem(STORAGE_KEY_ACTIVITIES, JSON.stringify(currentActivities));
-          }
-        }
-
-        // --- Merge Learning Time ---
+        // Merge Learning Time
         if ((currentSeconds === null || currentSeconds === 0) && idbSeconds && idbSeconds > 0) {
           currentSeconds = idbSeconds;
         }
@@ -158,7 +192,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           db.setAppState(STORAGE_KEY_LEARNING_SECONDS, currentSeconds);
         }
 
-        // --- Merge Daily Streak Tracking ---
+        // Merge Daily Streak Tracking
         const today = getTodayString();
         let datesList: string[] = currentDates || idbDates || [];
         if (!datesList.includes(today)) {
@@ -169,7 +203,6 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         if (window.localStorage && typeof window.localStorage.setItem === 'function') {
           window.localStorage.setItem(STORAGE_KEY_ACTIVE_DATES, JSON.stringify(datesList));
         }
-
       } catch (err) {
         console.error('Failed to initialize Dual Storage:', err);
       }
@@ -179,14 +212,13 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Update status function (Dual Write: LocalStorage + IndexedDB)
-  const updateStatus = (hadisId: number, status: HadisStatus) => {
+  const updateStatus = useCallback((hadisId: number, status: HadisStatus) => {
     setStatuses((prev) => {
       const updated = { ...prev, [hadisId]: status };
       try {
         if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.setItem === 'function') {
           window.localStorage.setItem(STORAGE_KEY_STATUSES, JSON.stringify(updated));
         }
-        // Save to IndexedDB
         db.saveHadisStatus(hadisId, status);
       } catch (err) {
         console.error('Failed to save status:', err);
@@ -220,7 +252,6 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.setItem === 'function') {
             window.localStorage.setItem(STORAGE_KEY_ACTIVITIES, JSON.stringify(updatedList));
           }
-          // Save to IndexedDB
           db.saveActivity(newActivity);
         } catch (err) {
           console.error('Failed to save activities:', err);
@@ -228,10 +259,10 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         return updatedList;
       });
     }
-  };
+  }, []);
 
   // Update last opened hadis (Dual Write)
-  const updateLastOpened = (hadisId: number) => {
+  const updateLastOpened = useCallback((hadisId: number) => {
     setLastOpenedHadisId(hadisId);
     try {
       if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.setItem === 'function') {
@@ -241,10 +272,10 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       console.error('Failed to save last opened hadis:', err);
     }
-  };
+  }, []);
 
   // Add learning seconds dynamically from Audio Player (Dual Write)
-  const addLearningSeconds = (seconds: number, hadisId?: number) => {
+  const addLearningSeconds = useCallback((seconds: number, hadisId?: number) => {
     setLearningSeconds((prev) => {
       const updated = prev + seconds;
       try {
@@ -272,7 +303,6 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         };
 
         setActivities((prev) => {
-          // Avoid duplicate listening activity logs within 1 minute for same hadis
           if (prev.length > 0 && prev[0].hadisId === hadisId && prev[0].desc.startsWith('Didengarkan')) {
             return prev;
           }
@@ -289,10 +319,10 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         });
       }
     }
-  };
+  }, []);
 
   // Reset all progress completely (Dual Clear: LocalStorage + IndexedDB)
-  const resetAllProgress = () => {
+  const resetAllProgress = useCallback(() => {
     const defaultMap: Record<number, HadisStatus> = {};
     hadisData.forEach((h) => {
       defaultMap[h.id] = 'belum';
@@ -315,51 +345,63 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       console.error('Failed to clear dual storage:', err);
     }
-  };
+  }, []);
 
   // Helper getters
-  const getHadisList = (): Hadis[] => {
+  const getHadisList = useCallback((): Hadis[] => {
     return hadisData.map((h) => ({
       ...h,
       status: statuses[h.id] || 'belum',
     }));
-  };
+  }, [statuses]);
 
-  const getHadisById = (id: number): Hadis | undefined => {
+  const getHadisById = useCallback((id: number): Hadis | undefined => {
     const original = hadisData.find((h) => h.id === id);
     if (!original) return undefined;
     return {
       ...original,
       status: statuses[id] || 'belum',
     };
-  };
+  }, [statuses]);
 
-  const getLastOpenedHadis = (): Hadis => {
+  const getLastOpenedHadis = useCallback((): Hadis => {
     return getHadisById(lastOpenedHadisId) || getHadisList()[0];
-  };
+  }, [getHadisById, getHadisList, lastOpenedHadisId]);
 
   const learningTimeMinutes = Math.round((learningSeconds / 60) * 10) / 10;
 
-  return (
-    <ProgressContext.Provider
-      value={{
-        statuses,
-        updateStatus,
-        lastOpenedHadisId,
-        updateLastOpened,
-        activities,
-        learningTimeMinutes,
-        addLearningSeconds,
-        streakDays,
-        getHadisList,
-        getHadisById,
-        getLastOpenedHadis,
-        resetAllProgress,
-      }}
-    >
-      {children}
-    </ProgressContext.Provider>
+  const value = useMemo(
+    () => ({
+      statuses,
+      updateStatus,
+      lastOpenedHadisId,
+      updateLastOpened,
+      activities,
+      learningTimeMinutes,
+      addLearningSeconds,
+      streakDays,
+      getHadisList,
+      getHadisById,
+      getLastOpenedHadis,
+      resetAllProgress,
+    }),
+    [
+      statuses,
+      updateStatus,
+      lastOpenedHadisId,
+      updateLastOpened,
+      activities,
+      learningTimeMinutes,
+      addLearningSeconds,
+      streakDays,
+      getHadisList,
+      getHadisById,
+      getLastOpenedHadis,
+      resetAllProgress,
+    ]
   );
+
+  return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
 }
 
 export function useProgress() {

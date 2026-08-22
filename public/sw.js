@@ -90,8 +90,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Strategy B: Audio files (.mp3 or audio pipeline)
-  if (url.pathname.endsWith('.mp3') || url.pathname.includes('/audio/')) {
+  // Strategy B: Audio files (.wav, .mp3 or audio pipeline)
+  if (url.pathname.endsWith('.mp3') || url.pathname.endsWith('.wav') || url.pathname.includes('/audio/')) {
     event.respondWith(
       caches.match(request).then((cachedAudio) => {
         if (cachedAudio) return cachedAudio;
