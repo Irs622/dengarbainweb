@@ -4,7 +4,19 @@ import Link from 'next/link';
 
 export default function WelcomePage() {
   return (
-    <div style={{ width: '100%', minHeight: '100dvh', background: '#FCF9F8', display: 'flex', flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+    <div
+      className="welcome-page"
+      style={{
+        width: '100%',
+        minHeight: '100dvh',
+        background: '#FCF9F8',
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start'
+      }}
+    >
       <div style={{ width: '100%', flex: 1, minHeight: '100dvh', position: 'relative', background: 'linear-gradient(180deg, #26987A 0%, #53A791 33%, #26987A 100%)', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
         {/* Background ambient glow circles */}
@@ -97,6 +109,18 @@ export default function WelcomePage() {
         </div>
 
       </div>
+      {/* Desktop override untuk Welcome Page */}
+    <style jsx global>{`
+      @media (min-width: 768px) {
+        .welcome-page {
+          width: 100vw !important;
+          min-height: 100dvh !important;
+          margin-left: -120px !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+      }
+    `}</style>
     </div>
   );
 }
