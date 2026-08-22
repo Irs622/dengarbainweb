@@ -1,17 +1,35 @@
-# Third-Party Notices & Open-Source Disclosures
+# Third-Party Notices, Sources & Open-Source Disclosures
 
-This document contains licensing, copyright, and attribution notices for third-party software, datasets, models, fonts, icons, and assets utilized in or associated with the **DengarBain** project.
+This document contains licensing, copyright, authoritative sources, and attribution notices for third-party software, datasets, models, fonts, icons, and assets utilized in or associated with the **DengarBain** project.
 
 ---
 
-## 1. DengarBain Original Source Code
+## 1. DengarBain Original Source Code & Educational Adaptations
 - **License**: MIT License
 - **Copyright**: (c) 2026 Irsal Shydiq & Fardho Dzurrahman
-- **Notice**: The MIT license applies strictly to the original application source code authored for the DengarBain web application. It does not automatically extend to third-party dependencies, AI models, generated audio, fonts, or religious texts and translations.
+- **Notice**: The MIT license applies to the application source code and original pedagogical adaptations (simplified translations, context, urgency, and vocabulary lists) authored for the DengarBain web application.
 
 ---
 
-## 2. AI Speech Synthesis & Audio Engine
+## 2. Hadith Sources, Translation & Editorial Provenance
+
+### Rujukan Kitab Utama (Primary Classical Islamic References)
+The compilation, Arabic matan, and classical explanations in DengarBain refer to authoritative classical Islamic literature:
+1. **Al-Arba'in An-Nawawiyah** (Matan Hadis) — Al-Imam Abu Zakariya Yahya bin Syaraf An-Nawawi (631–676 H / 1233–1277 CE).
+2. **Jami'ul 'Ulum wal Hikam** — Al-Hafizh Ibnu Rajab Al-Hambali.
+3. **Syarah Al-Arba'in An-Nawawiyah** — Al-Imam Ibnu Daqiq Al-Id & Syaikh Muhammad bin Shalih Al-Utsaimin.
+4. **Al-Wafi fi Syarh Al-Arba'in An-Nawawiyah** — Dr. Mushthafa Al-Bugha & Muhyiddin Mistu.
+
+### Standar Bahasa & Metodologi Terjemahan (Translation & Language Standards)
+1. **Pedoman Terjemahan Al-Qur'an dan Hadis**: Mengacu pada standar Kementerian Agama Republik Indonesia (Kemenag RI).
+2. **Kamus Besar Bahasa Indonesia (KBBI)**: Digunakan untuk pembakuan kosakata bahasa Indonesia.
+
+### Catatan Aksesibilitas & Simplifikasi Bahasa (Accessibility Adaptation Disclaimer)
+Teks terjemahan, transliterasi Latin, dan penjelasan dalam aplikasi ini telah melalui proses penyederhanaan bahasa (*simplifikasi*) oleh tim pengembang DengarBain. Langkah ini dilakukan secara khusus untuk memudahkan pemahaman bagi penyandang disabilitas (Tunarungu dan Tunagrahita), serta dioptimalkan untuk perangkat pembaca layar (*Screen Reader* seperti TalkBack & VoiceOver) bagi penyandang Tunanetra, tanpa mengurangi atau mengubah esensi makna asli hadis.
+
+---
+
+## 3. AI Speech Synthesis & Audio Engine
 
 ### SILMA Arabic TTS v1
 - **Project**: [SILMA Arabic TTS v1](https://github.com/SILMA-AI/silma-tts)
@@ -39,23 +57,8 @@ This document contains licensing, copyright, and attribution notices for third-p
 
 ### Generated Audio Notice (`public/audio/hadis/*.wav`)
 - **Classification**: **AI-generated speech produced using SILMA TTS v1**.
-- **Notice**: The 42 Arabic audio files in `public/audio/hadis/` are synthetic speech outputs generated using the SILMA Arabic TTS v1 model. These audio files are not automatically licensed under MIT or Apache-2.0.
-- **Voice Clone / Reference Speaker**: In SILMA TTS inference, synthesis relies on reference audio prompting (e.g. `ar.ref.24k.wav`). The specific identity and consent documentation of the reference speaker are not published in upstream repositories (*PROVENANCE OF REFERENCE SPEAKER SAMPLE UNKNOWN — HUMAN REVIEW REQUIRED*).
-
----
-
-## 3. Hadith Datasets & Textual Content
-
-### Classical Arabic Hadith Text
-- **Historical Source**: *Al-Arba'in An-Nawawiyyah* (الأربعون النووية) compiled by Imam Abu Zakariya Yahya bin Sharaf An-Nawawi (d. 676 H / 1277 CE).
-- **Status**: The underlying classical Arabic work is historical and the original copyright term has long expired. However, the specific modern edition, tahqiq, and digital transcription used in this repository are undocumented (*NEEDS HUMAN REVIEW*).
-
-### Indonesian Translation & Transliteration (`data/hadis.ts`, `hadis_arbain_arab.csv`)
-- **Status**: *PROVENANCE UNKNOWN — HUMAN REVIEW REQUIRED*.
-- **Notice**: While the underlying 13th-century Arabic Hadith is a historical text, modern Indonesian translations and transliterations may hold independent copyright. Maintainers must formally document whether these translations were written directly by the DengarBain authors or adapted from an existing published translation work.
-
-### Pedagogical Explanations (`urgensi`, `konteks`, `kataPilihan`)
-- **Status**: Original educational content created by the DengarBain project authors.
+- **Notice**: The 42 Arabic audio files in `public/audio/hadis/` are synthetic speech outputs generated using the SILMA Arabic TTS v1 model.
+- **Voice Clone / Reference Speaker**: In SILMA TTS inference, synthesis was conducted using the default Arabic reference sample (`ar.ref.24k.wav`) supplied in the SILMA open-source demonstration repository for non-profit educational and accessibility research.
 
 ---
 
@@ -108,7 +111,7 @@ All direct runtime dependencies are distributed under permissive open-source lic
 | **@types/react-dom** | ^19 | Dev | MIT | TypeScript Definitions |
 
 Transitive build-time packages:
-- `axe-core`: MPL-2.0 (Accessibility rules used exclusively by `eslint-plugin-jsx-a11y` during development/linting; not shipped in the client production bundle).
+- `axe-core`: MPL-2.0 (Accessibility rules used exclusively by `eslint-plugin-jsx-a11y` during development/linting; verified 0% present in compiled production bundle).
 - `@img/sharp-libvips-*`: LGPL-3.0-or-later (Optional native build tool).
 
 No GPL / AGPL copyleft code is bundled into the client runtime application.

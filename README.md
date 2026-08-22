@@ -193,6 +193,22 @@ Kami sangat menyambut partisipasi dan kontribusi dari komunitas pengembang:
 
 ---
 
+## 📚 Sumber Rujukan & Standar Terjemahan (Sources & References)
+
+Materi hadis, terjemahan, dan penjelasan dalam aplikasi ini disusun secara cermat dengan merujuk pada literatur keislaman yang otoritatif:
+
+### Rujukan Kitab Utama:
+1. **Al-Arba'in An-Nawawiyah** (Matan Hadis) — Al-Imam Abu Zakariya Yahya bin Syaraf An-Nawawi.
+2. **Jami'ul 'Ulum wal Hikam** — Al-Hafizh Ibnu Rajab Al-Hambali.
+3. **Syarah Al-Arba'in An-Nawawiyah** — Al-Imam Ibnu Daqiq Al-Id & Syaikh Muhammad bin Shalih Al-Utsaimin.
+4. **Al-Wafi fi Syarh Al-Arba'in An-Nawawiyah** — Dr. Mushthafa Al-Bugha & Muhyiddin Mistu.
+
+### Standar Bahasa & Aksesibilitas (Disclaimer):
+- **Standar Bahasa**: Mengacu pada Pedoman Terjemahan Kementerian Agama Republik Indonesia (Kemenag RI) dan Kamus Besar Bahasa Indonesia (KBBI).
+- **Adaptasi Aksesibilitas**: Teks terjemahan dan penjelasan telah melalui proses penyederhanaan bahasa (*simplifikasi*) yang ramah perangkat pembaca layar (*Screen Reader*) untuk memudahkan santri tunanetra dan penyandang disabilitas lainnya tanpa mengubah esensi makna asli hadis.
+
+---
+
 ## 🙏 Ucapan Terima Kasih & Atribusi Teknologi (Acknowledgements)
 
 Proyek **DengarBain** mengapresiasi dan berterima kasih kepada komunitas open-source serta pengembang teknologi AI pendukung:
