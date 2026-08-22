@@ -103,9 +103,13 @@ export default function SettingsPage() {
     <>
       <AppHeader />
 
-      <main
+      <div
+        className="settings-page-container"
         style={{
           paddingTop: 20,
+          maxWidth: '1200px',
+          margin: '0 auto',
+          width: '100%',
         }}
       >
 
@@ -265,7 +269,7 @@ export default function SettingsPage() {
         </div>
       )}
       
-      </main>
+      </div>
     </>
   );
 }

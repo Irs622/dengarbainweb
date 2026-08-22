@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { Hadis } from '@/data/hadis';
 
 const statusConfig: Record<string, { bg: string; text: string; label: string }> = {
-  hafal:  { bg: '#D1FAE5', text: '#065F46', label: 'HAFAL'  },
+  hafal: { bg: '#D1FAE5', text: '#065F46', label: 'HAFAL' },
   sedang: { bg: '#FEF3C7', text: '#92400E', label: 'SEDANG' },
-  belum:  { bg: '#F3F4F6', text: '#6B7280', label: 'BELUM'  },
+  belum: { bg: '#F3F4F6', text: '#6B7280', label: 'BELUM' },
 };
 
 interface HadisCardProps {
@@ -14,7 +14,7 @@ interface HadisCardProps {
 export default function HadisCard({ hadis }: HadisCardProps) {
   const st = statusConfig[hadis.status];
   const numColor = hadis.status === 'hafal' ? '#1A5C40' : hadis.status === 'sedang' ? '#D97706' : '#9CA3AF';
-  const numBg   = hadis.status === 'hafal' ? '#E8F5EE' : hadis.status === 'sedang' ? '#FEF3C7' : '#F3F4F6';
+  const numBg = hadis.status === 'hafal' ? '#E8F5EE' : hadis.status === 'sedang' ? '#FEF3C7' : '#F3F4F6';
 
   return (
     <Link href={`/hadis/${hadis.id}`} className="hadis-card">

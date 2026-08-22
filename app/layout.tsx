@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import BottomNav from '@/components/BottomNav';
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 import { ProgressProvider } from '@/context/ProgressContext';
+import { PWAInstallProvider } from '@/context/PWAInstallContext';
 
 export const metadata: Metadata = {
   title: 'DengarBain – Belajar Hadis Arbain Tunanetra',
@@ -26,27 +28,29 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
+        <ServiceWorkerRegister />
         <ProgressProvider>
-          <div className="app-layout">
-            {/* TalkBack Live Region Announcement for Screen Readers (NFR-ACC-04) */}
-            <div 
-              id="accessibility-announcer" 
-              className="sr-only" 
-              aria-live="polite" 
-              aria-atomic="true"
-            />
-            
-             <main
-            id="main-content"
-            className="app-main"
-          >
-              {children}
-            </main>
-            <BottomNav />
-          </div>
+          <PWAInstallProvider>
+            <div className="app-layout">
+              {/* TalkBack Live Region Announcement for Screen Readers (NFR-ACC-04) */}
+              <div 
+                id="accessibility-announcer" 
+                className="sr-only" 
+                aria-live="polite" 
+                aria-atomic="true"
+              />
+              
+              <main
+                id="main-content"
+                className="app-main"
+              >
+                {children}
+              </main>
+              <BottomNav />
+            </div>
+          </PWAInstallProvider>
         </ProgressProvider>
       </body>
     </html>
   );
 }
-

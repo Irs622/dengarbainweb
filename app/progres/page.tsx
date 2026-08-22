@@ -57,7 +57,7 @@ export default function ProgresPage() {
     <>
       <AppHeader />
 
-      <main style={{ paddingBottom: '32px' }}>
+      <div className="progres-page-container" style={{ paddingBottom: '32px', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
         <div style={{ padding: '4px 0' }}>
           <h2 className="font-playfair" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#064E3B', padding: '12px 16px 16px' }}>
             Progres Anda
@@ -212,7 +212,7 @@ export default function ProgresPage() {
             </div>
           )}
         </div>
-      </main>
+      </div>
     </>
   );
 }

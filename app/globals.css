@@ -56,33 +56,13 @@ h1, h2, h3, h4 {
 a { text-decoration: none; color: inherit; }
 button { font-family: inherit; }
 
-/* App shell */
-.app-shell {
-  max-width: 430px;
-  margin: 0 auto;
-  min-height: 100dvh;
-  background: var(--clr-bg);
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
+/* App shell & content */
 .page-content {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 0px;
 }
 
-/* Desktop / Windows */
-@media (min-width: 768px) {
-  .app-shell {
-    max-width: none;
-    width: calc(100% - 72px);
-    margin-left: 72px;
-    margin-right: 0;
-    min-height: 100dvh;
-  }
-}
 
 /* Arabic text */
 .arabic-text {
@@ -561,6 +541,8 @@ button { font-family: inherit; }
   min-height: 100dvh;
   width: 100%;
   background: var(--clr-bg);
+  display: flex;
+  flex-direction: column;
 }
 
 /* ============================================================
@@ -571,6 +553,7 @@ button { font-family: inherit; }
 .app-main {
   width: 100%;
   min-height: 100dvh;
+  padding-bottom: 110px;
 }
 
 /* ============================================================
@@ -580,16 +563,18 @@ button { font-family: inherit; }
 
 @media (min-width: 768px) {
   .app-main {
-    width: calc(100% - 88px);
-    margin-left: 88px;
-    padding-left: 32px;
-    padding-right: 32px;
+    width: calc(100% - 72px);
+    margin-left: 72px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 40px;
     min-height: 100dvh;
   }
-}
 
-/* Desktop */
-@media (min-width: 768px) {
+  .header-container {
+    padding: 16px 32px;
+  }
+
   /* Halaman Hadis: sembunyikan branding, pertahankan search */
   .app-header:not(.header-hide-desktop) .header-top-row {
     display: none !important;
