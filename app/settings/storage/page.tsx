@@ -37,7 +37,20 @@ export default function StoragePage() {
   });
   const [loading, setLoading] = useState(true);
   const [clearing, setClearing] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState<{
+    current: number;
+    total: number;
+    percent: number;
+    currentHadisId: number;
+  }>({
+    current: 0,
+    total: 42,
+    percent: 0,
+    currentHadisId: 1,
+  });
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
+  const [announcement, setAnnouncement] = useState<string>('');
 
   // Load real storage estimates from browser API & Cache Storage
   const loadStorageInfo = async () => {
@@ -63,14 +76,52 @@ export default function StoragePage() {
     100
   );
   const downloadedFiles = storageData.cachedAudioCount;
+  const isAllAudioCached = downloadedFiles >= 42;
+
+  // 1-Click Bulk Offline Audio Download
+  const handleBulkDownloadAudio = async () => {
+    if (downloading) return;
+    setDownloading(true);
+    setAnnouncement('Memulai pengunduhan 42 berkas audio hadis...');
+
+    try {
+      const result = await db.cacheAllAudioFiles((curr, total, hadisId) => {
+        const pct = Math.round((curr / total) * 100);
+        setDownloadProgress({
+          current: curr,
+          total,
+          percent: pct,
+          currentHadisId: hadisId,
+        });
+      });
+
+      await loadStorageInfo();
+
+      if (result.success >= 42) {
+        setFeedbackMsg('MasyaAllah! Seluruh 42 audio hadis berhasil disimpan ke memori luring.');
+        setAnnouncement('Semua 42 audio hadis berhasil tersimpan luring.');
+      } else {
+        setFeedbackMsg(`Berhasil mengunduh ${result.success} dari 42 audio hadis ke memori.`);
+      }
+      setTimeout(() => setFeedbackMsg(null), 5000);
+    } catch (err) {
+      console.error('Gagal mengunduh audio:', err);
+      setFeedbackMsg('Terjadi kendala saat mengunduh berkas audio.');
+      setTimeout(() => setFeedbackMsg(null), 4000);
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   // Real Clear Audio Cache
   const handleClearDownloads = async () => {
     setClearing(true);
+    setAnnouncement('Membersihkan cache audio luring...');
     try {
       await db.clearAudioCache();
       await loadStorageInfo();
       setFeedbackMsg('Penyimpanan cache audio berhasil dibersihkan.');
+      setAnnouncement('Cache audio berhasil dibersihkan.');
       setTimeout(() => setFeedbackMsg(null), 4000);
     } catch (err) {
       console.error('Gagal membersihkan cache:', err);
@@ -128,16 +179,24 @@ export default function StoragePage() {
         </h1>
       </header>
 
+      {/* Screen Reader Live Announcement */}
+      {announcement && (
+        <div className="sr-only" role="status" aria-live="polite">
+          {announcement}
+        </div>
+      )}
+
       <div
         className="storage-page-container"
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          padding: '20px 24px 40px',
+          padding: '20px 24px 48px',
           maxWidth: '1200px',
           margin: '0 auto',
           width: '100%',
+          boxSizing: 'border-box',
         }}
       >
         <div
@@ -339,7 +398,7 @@ export default function StoragePage() {
             </div>
           </div>
 
-          {/* Storage Statistics */}
+          {/* Storage Statistics Cards */}
           <div
             style={{
               width: '100%',
@@ -362,7 +421,6 @@ export default function StoragePage() {
                 flexDirection: 'column',
               }}
             >
-              {/* Icon */}
               <div
                 style={{
                   width: '40px',
@@ -424,7 +482,7 @@ export default function StoragePage() {
                     color: '#003F2F',
                   }}
                 >
-                  {downloadedFiles} Berkas
+                  {downloadedFiles} / 42 Berkas
                 </p>
               </div>
             </div>
@@ -442,7 +500,6 @@ export default function StoragePage() {
                 flexDirection: 'column',
               }}
             >
-              {/* Icon */}
               <div
                 style={{
                   width: '40px',
@@ -503,15 +560,203 @@ export default function StoragePage() {
             </div>
           </div>
 
+          {/* BULK OFFLINE AUDIO BUNDLE CARD */}
+          <div
+            style={{
+              width: '100%',
+              boxSizing: 'border-box',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '24px',
+              padding: '24px',
+              marginTop: '24px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+              border: '1.5px solid #C8F1DF',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  backgroundColor: '#1A5C40',
+                  color: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M21 15V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V15"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M7 10L12 15L17 10"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 15V3"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+
+              <div>
+                <h3
+                  className="font-playfair"
+                  style={{
+                    margin: 0,
+                    fontSize: '1.15rem',
+                    fontWeight: 800,
+                    color: '#004B39',
+                  }}
+                >
+                  Paket Audio Luring (Offline)
+                </h3>
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    color: isAllAudioCached ? '#065F46' : '#92400E',
+                  }}
+                >
+                  {isAllAudioCached
+                    ? '✓ 42/42 Audio Hadis Tersedia Lengkap Luring'
+                    : `Tersimpan ${downloadedFiles} dari 42 Audio`}
+                </span>
+              </div>
+            </div>
+
+            <p
+              style={{
+                margin: '0 0 16px',
+                fontSize: '0.85rem',
+                lineHeight: 1.6,
+                color: '#555555',
+              }}
+            >
+              Unduh seluruh 42 rekaman audio hadis ke memori lokal peramban agar Anda dapat mendengarkan dan menghafal hadis kapan saja tanpa koneksi internet dan tanpa memakai kuota data.
+            </p>
+
+            {/* Live Download Progress Bar */}
+            {downloading && (
+              <div style={{ marginBottom: '16px' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '6px',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    color: '#1A5C40',
+                  }}
+                >
+                  <span>Mengunduh Hadis #{downloadProgress.currentHadisId}...</span>
+                  <span>{downloadProgress.current} / {downloadProgress.total} ({downloadProgress.percent}%)</span>
+                </div>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '8px',
+                    backgroundColor: '#E8F5EE',
+                    borderRadius: '999px',
+                    overflow: 'hidden',
+                  }}
+                  role="progressbar"
+                  aria-valuenow={downloadProgress.percent}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  <div
+                    style={{
+                      width: `${downloadProgress.percent}%`,
+                      height: '100%',
+                      backgroundColor: '#1A5C40',
+                      borderRadius: '999px',
+                      transition: 'width 0.15s ease',
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Action Button */}
+            <button
+              type="button"
+              onClick={handleBulkDownloadAudio}
+              disabled={downloading}
+              style={{
+                width: '100%',
+                height: '48px',
+                borderRadius: '16px',
+                backgroundColor: isAllAudioCached ? '#065F46' : '#1A5C40',
+                color: '#FFFFFF',
+                border: 'none',
+                fontSize: '0.925rem',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                cursor: downloading ? 'wait' : 'pointer',
+                boxShadow: '0 4px 14px rgba(26, 92, 64, 0.25)',
+                transition: 'all 0.15s ease',
+              }}
+              aria-label={
+                isAllAudioCached
+                  ? 'Perbarui unduhan semua audio hadis'
+                  : 'Unduh seluruh 42 audio hadis untuk pemakaian luring'
+              }
+            >
+              {downloading ? (
+                <>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ animation: 'spin 1s linear infinite' }}>
+                    <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="3" strokeDasharray="32" strokeLinecap="round" />
+                  </svg>
+                  <span>Mengunduh Audio ({downloadProgress.percent}%)...</span>
+                </>
+              ) : isAllAudioCached ? (
+                <>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span>Semua 42 Audio Sudah Tersimpan (Perbarui)</span>
+                </>
+              ) : (
+                <>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 15V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V15" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M7 10L12 15L17 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12 15V3" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                  <span>Unduh Semua 42 Audio (Mode Luring)</span>
+                </>
+              )}
+            </button>
+          </div>
+
           {/* Clear Downloads Button */}
           <button
             type="button"
             onClick={handleClearDownloads}
-            disabled={clearing || (downloadedFiles === 0 && storageUsed < 1024 * 100)}
+            disabled={clearing || downloading || (downloadedFiles === 0 && storageUsed < 1024 * 100)}
             style={{
               width: '100%',
               height: '48px',
-              marginTop: '32px',
+              marginTop: '28px',
               borderRadius: '28px',
               border: '2px solid #00543F',
               backgroundColor: 'transparent',
@@ -524,7 +769,7 @@ export default function StoragePage() {
               fontSize: '0.9rem',
               fontWeight: 700,
               cursor: clearing ? 'wait' : 'pointer',
-              opacity: clearing || (downloadedFiles === 0 && storageUsed < 1024 * 100) ? 0.5 : 1,
+              opacity: clearing || downloading || (downloadedFiles === 0 && storageUsed < 1024 * 100) ? 0.5 : 1,
               transition: 'all 0.15s ease',
             }}
             aria-label="Bersihkan unduhan audio dan cache lokal"
@@ -547,6 +792,7 @@ export default function StoragePage() {
                 d="M6 7L7 20H17L18 7"
                 stroke="currentColor"
                 strokeWidth="1.8"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               />
               <path
@@ -569,7 +815,7 @@ export default function StoragePage() {
           <p
             style={{
               maxWidth: '360px',
-              margin: '16px auto 0',
+              margin: '14px auto 0',
               textAlign: 'center',
               fontSize: '0.8rem',
               lineHeight: 1.55,
@@ -589,7 +835,7 @@ export default function StoragePage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginTop: '44px',
+              marginTop: '40px',
             }}
           >
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none">

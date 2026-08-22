@@ -312,6 +312,53 @@ class DengarBainDBHelper {
     };
   }
 
+  // --- Bulk Cache All 42 Audio Files ---
+  async cacheAllAudioFiles(
+    onProgress?: (current: number, total: number, hadisId: number) => void
+  ): Promise<{ success: number; failed: number }> {
+    if (typeof window === 'undefined' || !('caches' in window)) {
+      return { success: 0, failed: 42 };
+    }
+
+    const total = 42;
+    let success = 0;
+    let failed = 0;
+
+    try {
+      const cache = await caches.open('dengarbain-cache-v2');
+
+      for (let i = 1; i <= total; i++) {
+        const paddedId = String(i).padStart(2, '0');
+        const url = `/audio/hadis/hadis-${paddedId}.wav`;
+
+        try {
+          const cached = await cache.match(url);
+          if (!cached) {
+            const response = await fetch(url);
+            if (response.ok) {
+              await cache.put(url, response.clone());
+              success++;
+            } else {
+              failed++;
+            }
+          } else {
+            success++;
+          }
+        } catch {
+          failed++;
+        }
+
+        if (onProgress) {
+          onProgress(i, total, i);
+        }
+      }
+    } catch (err) {
+      console.warn('Failed in cacheAllAudioFiles:', err);
+    }
+
+    return { success, failed };
+  }
+
   // --- Clear Audio / App Caches ---
   async clearAudioCache(): Promise<void> {
     if (typeof window === 'undefined') return;
