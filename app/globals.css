@@ -126,6 +126,8 @@ button { font-family: inherit; }
 .header-logo-icon {
   width: 32px;
   height: 32px;
+  max-width: 32px;
+  max-height: 32px;
   border-radius: 50%;
   background: var(--clr-primary-mid);
   color: var(--clr-primary);
@@ -137,8 +139,10 @@ button { font-family: inherit; }
 }
 
 .header-logo-icon img {
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
+  max-width: 24px;
+  max-height: 24px;
   object-fit: contain;
   display: block;
 }
@@ -577,6 +581,27 @@ button { font-family: inherit; }
     width: 100% !important;
     margin-left: 0 !important;
     padding-bottom: 0 !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE NAVIGATION (MOBILE BOTTOM NAV VS DESKTOP SIDEBAR)
+   ============================================================ */
+
+.nav-mobile-view {
+  display: flex !important;
+}
+
+.nav-desktop-view {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .nav-mobile-view {
+    display: none !important;
+  }
+  .nav-desktop-view {
+    display: flex !important;
   }
 }
 

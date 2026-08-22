@@ -52,10 +52,26 @@ export default function AppHeader({
             <div
               className="header-logo-icon"
               aria-hidden="true"
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
             >
               <img
                 src="/brand/dengarbain-secondary.png"
                 alt=""
+                style={{
+                  width: 24,
+                  height: 24,
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
               />
             </div>
 
