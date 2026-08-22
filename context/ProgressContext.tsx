@@ -2,14 +2,9 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { hadisData, Hadis, HadisStatus } from '@/data/hadis';
+import { db, ActivityRecord } from '@/lib/db';
 
-export interface ActivityItem {
-  id: string;
-  hadisId: number;
-  title: string;
-  desc: string;
-  timestamp: string;
-}
+export type ActivityItem = ActivityRecord;
 
 interface ProgressContextType {
   statuses: Record<number, HadisStatus>;
@@ -78,60 +73,121 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [learningSeconds, setLearningSeconds] = useState<number>(0);
   const [streakDays, setStreakDays] = useState<number>(1);
 
-  // Load state from localStorage on initial render
+  // Dual Storage Initializer: Load immediately from LocalStorage, verify & sync with IndexedDB in background
   useEffect(() => {
-    try {
-      // 1. Statuses
-      const savedStatuses = localStorage.getItem(STORAGE_KEY_STATUSES);
-      if (savedStatuses) {
-        setStatuses(JSON.parse(savedStatuses));
-      } else {
-        const initialMap: Record<number, HadisStatus> = {};
-        hadisData.forEach((h) => {
-          initialMap[h.id] = h.status;
-        });
-        setStatuses(initialMap);
-      }
+    if (typeof window === 'undefined') return;
 
-      // 2. Last opened
-      const savedLastOpened = localStorage.getItem(STORAGE_KEY_LAST_OPENED);
-      if (savedLastOpened) {
-        setLastOpenedHadisId(Number(savedLastOpened));
-      }
+    const loadDualStorage = async () => {
+      try {
+        let currentStatuses: Record<number, HadisStatus> | null = null;
+        let currentLastOpened: number | null = null;
+        let currentActivities: ActivityItem[] | null = null;
+        let currentSeconds: number | null = null;
+        let currentDates: string[] | null = null;
 
-      // 3. Activities
-      const savedActivities = localStorage.getItem(STORAGE_KEY_ACTIVITIES);
-      if (savedActivities) {
-        setActivities(JSON.parse(savedActivities));
-      }
+        // 1. Fast initial load from LocalStorage
+        if (window.localStorage && typeof window.localStorage.getItem === 'function') {
+          const lsStatuses = window.localStorage.getItem(STORAGE_KEY_STATUSES);
+          if (lsStatuses) currentStatuses = JSON.parse(lsStatuses);
 
-      // 4. Learning time
-      const savedSeconds = localStorage.getItem(STORAGE_KEY_LEARNING_SECONDS);
-      if (savedSeconds) {
-        setLearningSeconds(Number(savedSeconds));
-      }
+          const lsLastOpened = window.localStorage.getItem(STORAGE_KEY_LAST_OPENED);
+          if (lsLastOpened) currentLastOpened = Number(lsLastOpened);
 
-      // 5. Daily streak tracking
-      const today = getTodayString();
-      const savedDates = localStorage.getItem(STORAGE_KEY_ACTIVE_DATES);
-      let datesList: string[] = savedDates ? JSON.parse(savedDates) : [];
-      if (!datesList.includes(today)) {
-        datesList.push(today);
-        localStorage.setItem(STORAGE_KEY_ACTIVE_DATES, JSON.stringify(datesList));
-      }
-      setStreakDays(calculateStreak(datesList));
+          const lsActs = window.localStorage.getItem(STORAGE_KEY_ACTIVITIES);
+          if (lsActs) currentActivities = JSON.parse(lsActs);
 
-    } catch (err) {
-      console.error('Failed to load progress from localStorage:', err);
-    }
+          const lsSeconds = window.localStorage.getItem(STORAGE_KEY_LEARNING_SECONDS);
+          if (lsSeconds) currentSeconds = Number(lsSeconds);
+
+          const lsDates = window.localStorage.getItem(STORAGE_KEY_ACTIVE_DATES);
+          if (lsDates) currentDates = JSON.parse(lsDates);
+        }
+
+        // 2. Check IndexedDB as durable source / backup
+        const idbStatuses = await db.getAllHadisStatuses();
+        const idbActivities = await db.getActivities();
+        const idbLastOpened = await db.getAppState<number>(STORAGE_KEY_LAST_OPENED);
+        const idbSeconds = await db.getAppState<number>(STORAGE_KEY_LEARNING_SECONDS);
+        const idbDates = await db.getAppState<string[]>(STORAGE_KEY_ACTIVE_DATES);
+
+        // --- Merge Statuses ---
+        if (!currentStatuses || Object.keys(currentStatuses).length === 0) {
+          if (Object.keys(idbStatuses).length > 0) {
+            currentStatuses = idbStatuses;
+          } else {
+            const initialMap: Record<number, HadisStatus> = {};
+            hadisData.forEach((h) => {
+              initialMap[h.id] = h.status;
+            });
+            currentStatuses = initialMap;
+          }
+        }
+        setStatuses(currentStatuses);
+        db.bulkSaveHadisStatus(currentStatuses);
+        if (window.localStorage && typeof window.localStorage.setItem === 'function') {
+          window.localStorage.setItem(STORAGE_KEY_STATUSES, JSON.stringify(currentStatuses));
+        }
+
+        // --- Merge Last Opened ---
+        if (!currentLastOpened && idbLastOpened) {
+          currentLastOpened = idbLastOpened;
+        }
+        if (currentLastOpened) {
+          setLastOpenedHadisId(currentLastOpened);
+          db.setAppState(STORAGE_KEY_LAST_OPENED, currentLastOpened);
+        }
+
+        // --- Merge Activities ---
+        if ((!currentActivities || currentActivities.length === 0) && idbActivities.length > 0) {
+          currentActivities = idbActivities;
+        }
+        if (currentActivities) {
+          setActivities(currentActivities);
+          db.saveActivities(currentActivities);
+          if (window.localStorage && typeof window.localStorage.setItem === 'function') {
+            window.localStorage.setItem(STORAGE_KEY_ACTIVITIES, JSON.stringify(currentActivities));
+          }
+        }
+
+        // --- Merge Learning Time ---
+        if ((currentSeconds === null || currentSeconds === 0) && idbSeconds && idbSeconds > 0) {
+          currentSeconds = idbSeconds;
+        }
+        if (currentSeconds !== null) {
+          setLearningSeconds(currentSeconds);
+          db.setAppState(STORAGE_KEY_LEARNING_SECONDS, currentSeconds);
+        }
+
+        // --- Merge Daily Streak Tracking ---
+        const today = getTodayString();
+        let datesList: string[] = currentDates || idbDates || [];
+        if (!datesList.includes(today)) {
+          datesList = [...datesList, today];
+        }
+        setStreakDays(calculateStreak(datesList));
+        db.setAppState(STORAGE_KEY_ACTIVE_DATES, datesList);
+        if (window.localStorage && typeof window.localStorage.setItem === 'function') {
+          window.localStorage.setItem(STORAGE_KEY_ACTIVE_DATES, JSON.stringify(datesList));
+        }
+
+      } catch (err) {
+        console.error('Failed to initialize Dual Storage:', err);
+      }
+    };
+
+    loadDualStorage();
   }, []);
 
-  // Update status function
+  // Update status function (Dual Write: LocalStorage + IndexedDB)
   const updateStatus = (hadisId: number, status: HadisStatus) => {
     setStatuses((prev) => {
       const updated = { ...prev, [hadisId]: status };
       try {
-        localStorage.setItem(STORAGE_KEY_STATUSES, JSON.stringify(updated));
+        if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.setItem === 'function') {
+          window.localStorage.setItem(STORAGE_KEY_STATUSES, JSON.stringify(updated));
+        }
+        // Save to IndexedDB
+        db.saveHadisStatus(hadisId, status);
       } catch (err) {
         console.error('Failed to save status:', err);
       }
@@ -161,7 +217,11 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       setActivities((prev) => {
         const updatedList = [newActivity, ...prev.slice(0, 14)];
         try {
-          localStorage.setItem(STORAGE_KEY_ACTIVITIES, JSON.stringify(updatedList));
+          if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.setItem === 'function') {
+            window.localStorage.setItem(STORAGE_KEY_ACTIVITIES, JSON.stringify(updatedList));
+          }
+          // Save to IndexedDB
+          db.saveActivity(newActivity);
         } catch (err) {
           console.error('Failed to save activities:', err);
         }
@@ -170,22 +230,28 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Update last opened hadis
+  // Update last opened hadis (Dual Write)
   const updateLastOpened = (hadisId: number) => {
     setLastOpenedHadisId(hadisId);
     try {
-      localStorage.setItem(STORAGE_KEY_LAST_OPENED, String(hadisId));
+      if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.setItem === 'function') {
+        window.localStorage.setItem(STORAGE_KEY_LAST_OPENED, String(hadisId));
+      }
+      db.setAppState(STORAGE_KEY_LAST_OPENED, hadisId);
     } catch (err) {
       console.error('Failed to save last opened hadis:', err);
     }
   };
 
-  // Add learning seconds dynamically from Audio Player
+  // Add learning seconds dynamically from Audio Player (Dual Write)
   const addLearningSeconds = (seconds: number, hadisId?: number) => {
     setLearningSeconds((prev) => {
       const updated = prev + seconds;
       try {
-        localStorage.setItem(STORAGE_KEY_LEARNING_SECONDS, String(updated));
+        if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.setItem === 'function') {
+          window.localStorage.setItem(STORAGE_KEY_LEARNING_SECONDS, String(updated));
+        }
+        db.setAppState(STORAGE_KEY_LEARNING_SECONDS, updated);
       } catch (err) {
         console.error('Failed to save learning time:', err);
       }
@@ -212,7 +278,10 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           }
           const updatedList = [newActivity, ...prev.slice(0, 14)];
           try {
-            localStorage.setItem(STORAGE_KEY_ACTIVITIES, JSON.stringify(updatedList));
+            if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.setItem === 'function') {
+              window.localStorage.setItem(STORAGE_KEY_ACTIVITIES, JSON.stringify(updatedList));
+            }
+            db.saveActivity(newActivity);
           } catch (err) {
             console.error('Failed to save activities:', err);
           }
@@ -222,7 +291,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Reset all progress completely
+  // Reset all progress completely (Dual Clear: LocalStorage + IndexedDB)
   const resetAllProgress = () => {
     const defaultMap: Record<number, HadisStatus> = {};
     hadisData.forEach((h) => {
@@ -235,13 +304,16 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     setStreakDays(1);
 
     try {
-      localStorage.removeItem(STORAGE_KEY_STATUSES);
-      localStorage.removeItem(STORAGE_KEY_LAST_OPENED);
-      localStorage.removeItem(STORAGE_KEY_ACTIVITIES);
-      localStorage.removeItem(STORAGE_KEY_LEARNING_SECONDS);
-      localStorage.removeItem(STORAGE_KEY_ACTIVE_DATES);
+      if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.removeItem === 'function') {
+        window.localStorage.removeItem(STORAGE_KEY_STATUSES);
+        window.localStorage.removeItem(STORAGE_KEY_LAST_OPENED);
+        window.localStorage.removeItem(STORAGE_KEY_ACTIVITIES);
+        window.localStorage.removeItem(STORAGE_KEY_LEARNING_SECONDS);
+        window.localStorage.removeItem(STORAGE_KEY_ACTIVE_DATES);
+      }
+      db.clearAllData();
     } catch (err) {
-      console.error('Failed to clear localStorage:', err);
+      console.error('Failed to clear dual storage:', err);
     }
   };
 
