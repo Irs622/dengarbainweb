@@ -28,8 +28,8 @@ Seluruh 42 berkas audio pelafalan teks Arab Hadis Arbain pada proyek ini disinte
 - **Upstream Dependencies (Inference)**: F5-TTS (MIT), CATT (Tashkeel Tool), NVIDIA NeMo Text Processing (Apache 2.0).
 
 ### Status Hukum Berkas Audio yang Dihasilkan
-1. **AI-Generated Speech**: Berkas audio `.wav` di folder ini adalah output sintesis suara berbasis AI. Berkas audio ini tidak secara otomatis berlisensi MIT atau Apache-2.0 hanya karena software atau bobot modelnya bersifat open-source.
-2. **Sampel Suara Referensi (Voice Reference Sample)**: Suara disintesis menggunakan sampel referensi audio bahasa Arab. Identitas dan dokumentasi persetujuan penutur suara referensi belum terdokumentasi dalam repositori (*PROVENANCE UNKNOWN — HUMAN REVIEW REQUIRED*).
+1. **AI-Generated Speech**: Seluruh 42 berkas audio `.wav` di folder ini merupakan **suara hasil sintesis AI yang dihasilkan menggunakan SILMA TTS v1 (*AI-generated speech produced using SILMA TTS v1*)**. Berkas audio ini tidak secara otomatis berlisensi MIT atau Apache-2.0 hanya karena software atau bobot modelnya bersifat open-source.
+2. **Sampel Suara Referensi (Voice Reference Sample)**: Suara disintesis menggunakan sampel referensi audio bahasa Arab (`ar.ref.24k.wav`). Identitas dan dokumentasi persetujuan penutur suara referensi belum terdokumentasi dalam repositori (*PROVENANCE OF REFERENCE SPEAKER SAMPLE UNKNOWN — HUMAN REVIEW REQUIRED*).
 
 ### Kutipan Sitasi (Citation):
 ```bibtex
