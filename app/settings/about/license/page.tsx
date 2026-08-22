@@ -55,7 +55,7 @@ export default function LicensePage() {
               lineHeight: "24px",
             }}
           >
-            Copyright (c) 2026 Irsal Shydiq &amp; Fardho Zurrahman
+            Copyright (c) 2026 Irsal Shydiq &amp; Fardho Dzurrahman
           </div>
 
           {/* License Content */}
@@ -274,7 +274,7 @@ export default function LicensePage() {
 
               <p>
                 Copyright (c) 2026 Irsal Shydiq &amp;<br />
-                Fardho Zurrahman
+                Fardho Dzurrahman
               </p>
 
               <p>

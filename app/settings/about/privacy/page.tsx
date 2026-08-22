@@ -244,7 +244,7 @@ export default function PrivacyPolicyPage() {
         >
           <p>
             Information collected by DengarBain is used only to provide,
-            maintain, improve, and secure the application's features.
+            maintain, improve, and secure the application&apos;s features.
           </p>
 
           <p>
@@ -296,7 +296,7 @@ export default function PrivacyPolicyPage() {
 
           <p>
             These services may include Google Fonts for typography and
-            GitHub for hosting and distributing the project's open-source
+            GitHub for hosting and distributing the project&apos;s open-source
             source code.
           </p>
 
@@ -342,7 +342,7 @@ export default function PrivacyPolicyPage() {
           title="Changes to This Privacy Policy"
         >
           <p>
-            This Privacy Policy may be updated when DengarBain's features,
+            This Privacy Policy may be updated when DengarBain&apos;s features,
             services, or data practices change.
           </p>
 

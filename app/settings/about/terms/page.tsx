@@ -104,8 +104,8 @@ export default function TermsOfServicePage() {
           title="About DengarBain"
         >
           <p>
-            These Terms of Service ("Terms") govern your use of the
-            DengarBain application and website ("Service"). By accessing or
+            These Terms of Service (&quot;Terms&quot;) govern your use of the
+            DengarBain application and website (&quot;Service&quot;). By accessing or
             using the Service, you agree to be bound by these Terms.
           </p>
 
@@ -252,7 +252,7 @@ export default function TermsOfServicePage() {
         >
           <p>
             We aim to provide consistent availability, but the Service is
-            provided "as is".
+            provided &quot;as is&quot;.
           </p>
 
           <p>
@@ -289,7 +289,7 @@ export default function TermsOfServicePage() {
 
           <p>
             If a revision is material, we will try to provide at least 30
-            days' notice prior to any new terms taking effect.
+            days&apos; notice prior to any new terms taking effect.
           </p>
         </LegalSection>
 

@@ -202,6 +202,14 @@ Proyek **DengarBain** mengapresiasi dan berterima kasih kepada komunitas open-so
 
 ---
 
-## 📄 Lisensi
-Proyek ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](LICENSE) untuk detail hak cipta lengkap.
-Audio disintesis menggunakan model SILMA Arabic TTS di bawah lisensi Apache 2.0.
+## 📄 Lisensi & Kepatuhan Hak Cipta (Licensing & Compliance)
+
+Kode sumber asli aplikasi **DengarBain** dilisensikan di bawah **[MIT License](LICENSE)**.
+
+Material pihak ketiga, dependensi npm, berkas audio sintesis AI, teks keagamaan klasik, font, ikon, dan materi eksternal lainnya tidak secara otomatis dicakup oleh lisensi MIT DengarBain dan tunduk pada lisensi serta pemberitahuan atribusi masing-masing.
+
+Rincian kepatuhan lisensi, atribusi model AI, dan pemberitahuan pihak ketiga dapat dilihat di:
+- **[LICENSE](LICENSE)** — Lisensi kode sumber asli DengarBain (MIT).
+- **[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)** — Dokumentasi lisensi dependensi, model SILMA TTS, font, dan dataset.
+- **[docs/LICENSE-COMPLIANCE-AUDIT.md](docs/LICENSE-COMPLIANCE-AUDIT.md)** — Laporan audit kepatuhan lisensi komprehensif.
+

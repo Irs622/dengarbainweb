@@ -33,10 +33,10 @@ class DengarBainDBHelper {
 
   private async getDB(): Promise<IDBDatabase | null> {
     if (typeof window === 'undefined' || !window.indexedDB) return null;
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const request = indexedDB.open(this.dbName, this.version);
       
-      request.onupgradeneeded = (event) => {
+      request.onupgradeneeded = () => {
         const db = request.result;
         
         // 1. Hadis Progress Store

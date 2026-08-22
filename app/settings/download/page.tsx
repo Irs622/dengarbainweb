@@ -354,10 +354,10 @@ export default function DownloadPage() {
                   Ketuk tombol <strong>Bagikan (Share)</strong> di bilah bawah peramban Safari (ikon kotak berpanah atas).
                 </li>
                 <li>
-                  Gulir ke bawah dan pilih <strong>"Tambahkan ke Layar Utama" (Add to Home Screen)</strong>.
+                  Gulir ke bawah dan pilih <strong>&quot;Tambahkan ke Layar Utama&quot; (Add to Home Screen)</strong>.
                 </li>
                 <li>
-                  Ketuk <strong>"Tambah" (Add)</strong> di sudut kanan atas untuk menyelesaikan.
+                  Ketuk <strong>&quot;Tambah&quot; (Add)</strong> di sudut kanan atas untuk menyelesaikan.
                 </li>
               </ol>
             </div>
