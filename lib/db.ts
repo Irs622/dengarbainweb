@@ -2,8 +2,6 @@ export interface HadisProgress {
   hadisId: number;
   status: 'belum' | 'sedang' | 'hafal';
   lastListenedAt?: string;
-  abLoopStart?: number;
-  abLoopEnd?: number;
 }
 
 export interface ActivityRecord {
