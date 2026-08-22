@@ -1,7 +1,7 @@
 {
-  "name": "DengarBain – Belajar Hadis Arbain Tunanetra",
+  "name": "DengarBain - Belajar Hadis Arbain Tunanetra",
   "short_name": "DengarBain",
-  "description": "Aplikasi PWA inklusif belajar 40 Hadis Arbain An-Nawawiyah berbasis audio & luring (Offline-First) ramah TalkBack.",
+  "description": "Aplikasi PWA inklusif belajar 42 Hadis Arbain An-Nawawiyah berbasis audio & luring (Offline-First) ramah TalkBack.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

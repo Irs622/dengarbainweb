@@ -29,6 +29,18 @@
   font-family: 'Playfair Display', serif;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .font-arabic {
   font-family: 'Amiri', serif;
 }
@@ -126,6 +138,8 @@ button { font-family: inherit; }
 .header-logo-icon {
   width: 32px;
   height: 32px;
+  max-width: 32px;
+  max-height: 32px;
   border-radius: 50%;
   background: var(--clr-primary-mid);
   color: var(--clr-primary);
@@ -137,8 +151,10 @@ button { font-family: inherit; }
 }
 
 .header-logo-icon img {
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
+  max-width: 24px;
+  max-height: 24px;
   object-fit: contain;
   display: block;
 }
@@ -571,6 +587,37 @@ button { font-family: inherit; }
     min-height: 100dvh;
   }
 
+  /* Reset layout for full-bleed welcome page on desktop */
+  .app-layout:has(.welcome-page) .app-main,
+  .app-main:has(.welcome-page) {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE NAVIGATION (MOBILE BOTTOM NAV VS DESKTOP SIDEBAR)
+   ============================================================ */
+
+.nav-mobile-view {
+  display: flex !important;
+}
+
+.nav-desktop-view {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .nav-mobile-view {
+    display: none !important;
+  }
+  .nav-desktop-view {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 768px) {
   .header-container {
     padding: 16px 32px;
   }

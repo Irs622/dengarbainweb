@@ -62,31 +62,8 @@ export default function BottomNav() {
 
   if (pathname === '/' || pathname === '/welcome') return null;
 
- return (
+  return (
     <>
-      {/* CSS Media Query langsung untuk mengatur batasan lebar layar (min-width & max-width) */}
-      <style jsx global>{`
-        /* mOBILE*/
-        @media (max-width: 767px) {
-          .nav-mobile-view {
-            display: flex !important;
-          }
-          .nav-desktop-view {
-            display: none !important;
-          }
-        }
-
-        /* 2. Windows (Minimal Lebar 768px) */
-        @media (min-width: 768px) {
-          .nav-mobile-view {
-            display: none !important;
-          }
-          .nav-desktop-view {
-            display: flex !important;
-          }
-        }
-      `}</style>
-
       {/* COMPONENT MOBILE BOTTOM NAV (Aktif hanya saat max-width: 767px) */}
       <nav 
         className="nav-mobile-view"
@@ -158,11 +135,24 @@ export default function BottomNav() {
         {/* Brand Icon Header */}
         <div style={{ marginBottom: '32px' }}>
           <Link href="/hadis" style={{ display: 'block' }}>
-            <div className="header-logo-icon" aria-hidden="true" style={{ width: '36px', height: '36px' }}>
+            <div
+              className="header-logo-icon"
+              aria-hidden="true"
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: '50%',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
               <img
                 src="/brand/dengarbain-secondary.png"
                 alt="DengarBain Logo"
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                style={{ width: 26, height: 26, objectFit: 'contain', display: 'block' }}
               />
             </div>
           </Link>

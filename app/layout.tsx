@@ -7,7 +7,7 @@ import { PWAInstallProvider } from '@/context/PWAInstallContext';
 
 export const metadata: Metadata = {
   title: 'DengarBain – Belajar Hadis Arbain Tunanetra',
-  description: 'Aplikasi PWA inklusif belajar 40 Hadis Arbain An-Nawawiyah berbasis audio & luring (Offline-First) ramah TalkBack.',
+  description: 'Aplikasi PWA inklusif belajar 42 Hadis Arbain An-Nawawiyah berbasis audio & luring (Offline-First) ramah TalkBack.',
   keywords: 'hadis arbain, nawawi, tunanetra, talkback, pwa offline, belajar hadis',
   manifest: '/manifest.json',
 };

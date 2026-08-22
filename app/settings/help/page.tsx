@@ -1,10 +1,18 @@
 'use client';
 
-import Link from "next/link";
-import BottomNav from '@/components/BottomNav';
+import React from 'react';
+import Link from 'next/link';
 import HelpCard from '@/components/HelpCard';
 
-const helpCards = [
+interface HelpItem {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  badge?: string;
+  image?: string;
+}
+
+const helpCards: HelpItem[] = [
   {
     title: 'Menguasai DengarBain',
     badge: 'Aksesibilitas Utama',
@@ -175,72 +183,69 @@ export default function HelpPage() {
 
   return (
     <>
-  {/* App Header */}
-  <header
-    style={{
-      padding: "10px 16px",
-      display: "flex",
-      alignItems: "center",
-      position: "relative",
-    }}
-  >
-    {/* Back Button */}
-    <Link href="/settings">
-          <button className="back-btn" aria-label="Kembali">
+      {/* App Header */}
+      <header
+        style={{
+          padding: "10px 16px",
+          display: "flex",
+          alignItems: "center",
+          position: "relative",
+          backgroundColor: "#FFFFFF",
+          borderBottom: "1px solid #E8E8E2",
+        }}
+      >
+        {/* Back Button */}
+        <Link href="/settings">
+          <button className="back-btn" aria-label="Kembali ke Pengaturan">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M19 12H5M12 5l-7 7 7 7" stroke="#1A5C40" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
         </Link>
 
-    {/* Center Title */}
-    <h1
-      className="font-playfair"
-      style={{
-        position: "absolute",
-        left: "50%",
-        transform: "translateX(-50%)",
-        margin: 0,
-        fontSize: "1.75rem",
-        fontWeight: 900,
-        color: "#1A5C40",
-        lineHeight: 1,
-        whiteSpace: "nowrap",
-      }}
-    >
-      DengarBain
-    </h1>
-  </header>
+        {/* Center Title */}
+        <h1
+          className="font-playfair"
+          style={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            margin: 0,
+            fontSize: "1.75rem",
+            fontWeight: 900,
+            color: "#1A5C40",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
+          }}
+        >
+          DengarBain
+        </h1>
+      </header>
 
-  <main
-  >
-    <div style = {{gap: '2px', display: 'flex', flexDirection: 'column', padding: '20px 16px 16px'}}>
-    <div>
-        <h2 className="font-playfair" style={{ fontSize: '1.75rem', fontWeight: 700, color: '#064E3B'}}>
-          Bantuan
-        </h2>
-            <p
-              style={{ fontSize: '1rem', color: '#595b5f' }}
-            >
+      <main style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+        <div style={{ gap: '2px', display: 'flex', flexDirection: 'column', padding: '20px 16px 16px' }}>
+          <div>
+            <h2 className="font-playfair" style={{ fontSize: '1.75rem', fontWeight: 700, color: '#064E3B', margin: '0 0 6px' }}>
+              Bantuan
+            </h2>
+            <p style={{ fontSize: '1rem', color: '#595b5f', margin: 0 }}>
               Panduan dan tutorial menggunakan DengarBain
             </p>
-    </div>
-    </div>
+          </div>
+        </div>
 
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', 
-                }}>     
-        
-        {helpCards.map((card) => (
-              <HelpCard
-                key={card.title}
-                title={card.title}
-                description={card.description}
-                icon={card.icon}
-                badge={card.badge}
-                image={card.image}
-                onClick={() => handleCardClick(card.title)}
-              />
-            ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', padding: '0 16px 40px' }}>
+          {helpCards.map((card) => (
+            <HelpCard
+              key={card.title}
+              title={card.title}
+              description={card.description}
+              icon={card.icon}
+              badge={card.badge}
+              image={card.image}
+              onClick={() => handleCardClick(card.title)}
+            />
+          ))}
         </div>
       </main>
     </>

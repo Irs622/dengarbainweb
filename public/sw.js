@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dengarbain-cache-v1';
+const CACHE_NAME = 'dengarbain-cache-v2';
 
 const PRECACHE_URLS = [
   '/',
@@ -12,6 +12,7 @@ const PRECACHE_URLS = [
   '/manifest.json',
   '/brand/dengarbain-primary.png',
   '/brand/dengarbain-secondary.png',
+  '/images/menguasai-dengarbain.png',
 ];
 
 // 1. Install Event: Pre-cache critical routes and assets
@@ -90,8 +91,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Strategy B: Audio files (.mp3 or audio pipeline)
-  if (url.pathname.endsWith('.mp3') || url.pathname.includes('/audio/')) {
+  // Strategy B: Audio files (.wav, .mp3 or audio pipeline)
+  if (url.pathname.endsWith('.mp3') || url.pathname.endsWith('.wav') || url.pathname.includes('/audio/')) {
     event.respondWith(
       caches.match(request).then((cachedAudio) => {
         if (cachedAudio) return cachedAudio;
