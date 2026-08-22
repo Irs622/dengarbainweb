@@ -27,7 +27,7 @@ export default function RootLayout({
       </head>
       <body>
         <ProgressProvider>
-          <div className="app-shell">
+          <div className="app-layout">
             {/* TalkBack Live Region Announcement for Screen Readers (NFR-ACC-04) */}
             <div 
               id="accessibility-announcer" 
@@ -36,7 +36,10 @@ export default function RootLayout({
               aria-atomic="true"
             />
             
-            <main className="page-content" id="main-content">
+             <main
+            id="main-content"
+            className="app-main"
+          >
               {children}
             </main>
             <BottomNav />

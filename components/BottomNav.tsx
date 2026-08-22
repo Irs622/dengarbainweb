@@ -62,52 +62,136 @@ export default function BottomNav() {
 
   if (pathname === '/' || pathname === '/welcome') return null;
 
-  return (
-    <nav style={{
-      position: 'sticky',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: '72px',
-      backgroundColor: '#FFFFFF',
-      borderTop: '1px solid #E8E8E2',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      zIndex: 100,
-      boxShadow: '0 -4px 20px rgba(0,0,0,0.06)',
-    }}>
-      {navItems.map((item) => {
-        const isActive = pathname.startsWith(item.href);
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '8px 24px',
-              borderRadius: '16px',
-              backgroundColor: isActive ? '#E8F5EE' : 'transparent',
-              textDecoration: 'none',
-              transition: 'all 0.2s ease',
-            }}
-          >
-            {item.icon(isActive)}
-            <span style={{
-              fontSize: '0.6875rem',
-              fontWeight: isActive ? 700 : 500,
-              color: isActive ? '#1A5C40' : '#9CA3AF',
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              letterSpacing: isActive ? '0.01em' : '0',
-            }}>
-              {item.label}
-            </span>
+ return (
+    <>
+      {/* CSS Media Query langsung untuk mengatur batasan lebar layar (min-width & max-width) */}
+      <style jsx global>{`
+        /* mOBILE*/
+        @media (max-width: 767px) {
+          .nav-mobile-view {
+            display: flex !important;
+          }
+          .nav-desktop-view {
+            display: none !important;
+          }
+        }
+
+        /* 2. Windows (Minimal Lebar 768px) */
+        @media (min-width: 768px) {
+          .nav-mobile-view {
+            display: none !important;
+          }
+          .nav-desktop-view {
+            display: flex !important;
+          }
+        }
+      `}</style>
+
+      {/* COMPONENT MOBILE BOTTOM NAV (Aktif hanya saat max-width: 767px) */}
+      <nav 
+        className="nav-mobile-view"
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '100px',
+          backgroundColor: '#FFFFFF',
+          borderTop: '1px solid #E8E8E2',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          zIndex: 9999,
+          boxShadow: '0 -4px 20px rgba(0,0,0,0.06)',
+        }}
+      >
+        {navItems.map((item) => {
+          const isActive = pathname.startsWith(item.href);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '8px 20px',
+                borderRadius: '16px',
+                backgroundColor: isActive ? '#E8F5EE' : 'transparent',
+                textDecoration: 'none',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {item.icon(isActive)}
+              <span style={{
+                fontSize: '0.6875rem',
+                fontWeight: isActive ? 700 : 500,
+                color: isActive ? '#1A5C40' : '#9CA3AF',
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+              }}>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* COMPONENT DESKTOP SIDEBAR (Aktif hanya saat min-width: 768px) */}
+      <aside 
+        className="nav-desktop-view"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          width: '72px',
+          backgroundColor: '#FFFFFF',
+          borderRight: '1px solid #E8E8E2',
+          flexDirection: 'column',
+          alignItems: 'center',
+          paddingTop: '32px',
+          zIndex: 9999,
+          boxShadow: '2px 0 10px rgba(0,0,0,0.03)',
+        }}
+      >
+
+        {/* Brand Icon Header */}
+        <div style={{ marginBottom: '32px' }}>
+          <Link href="/hadis" style={{ display: 'block' }}>
+            <div className="header-logo-icon" aria-hidden="true" style={{ width: '36px', height: '36px' }}>
+              <img
+                src="/brand/dengarbain-secondary.png"
+                alt="DengarBain Logo"
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              />
+            </div>
           </Link>
-        );
-      })}
-    </nav>
+        </div>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {navItems.map((item) => {
+            const isActive = pathname.startsWith(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                style={{
+                  padding: '12px',
+                  borderRadius: '14px',
+                  backgroundColor: isActive ? '#E8F5EE' : 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease',
+                }}
+                title={item.label}
+              >
+                {item.icon(isActive)}
+              </Link>
+            );
+          })}
+        </div>
+      </aside>
+    </>
   );
 }
