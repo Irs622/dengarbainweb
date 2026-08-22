@@ -41,6 +41,7 @@ const helpCards: HelpItem[] = [
         />
       </svg>
     ),
+    image: '/images/menguasai-dengarbain.png',
   },
 
   {
