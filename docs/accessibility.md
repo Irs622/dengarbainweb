@@ -1,66 +1,67 @@
 # Accessibility Case Study: DengarBain
 
-Aplikasi DengarBain dirancang bukan sebagai aplikasi web biasa, melainkan secara spesifik menargetkan pengguna tunanetra yang bergantung pada *Screen Reader* (seperti TalkBack di Android dan VoiceOver di iOS) sebagai sumber informasi utama mereka.
+Aplikasi DengarBain dirancang bukan sebagai aplikasi web biasa, melainkan secara spesifik menargetkan pengguna tunanetra yang bergantung pada *Screen Reader* (seperti TalkBack di Android, VoiceOver di iOS/macOS, dan NVDA di Windows) sebagai sumber informasi utama mereka.
 
-Dokumen ini menjelaskan tantangan aksesibilitas yang kami hadapi, keputusan desain yang kami ambil, implementasi teknis, dan hasil yang dicapai.
+Dokumen ini menjelaskan tantangan aksesibilitas yang dihadapi, keputusan desain yang diambil, implementasi teknis, dan hasil yang dicapai.
 
 ## 1. Accessibility Challenge
 
 Pengguna tunanetra menghadapi beberapa tantangan unik saat menggunakan aplikasi web untuk belajar dan menghafal hadis:
-1. **Ketergantungan Audio**: Mereka tidak dapat mengandalkan *interface* visual untuk navigasi atau mendapatkan umpan balik status aplikasi (misalnya indikator bahwa audio sedang diunduh).
+1. **Ketergantungan Audio**: Mereka tidak dapat mengandalkan *interface* visual untuk navigasi atau mendapatkan umpan balik status aplikasi (misalnya indikator audio sedang diunduh atau diputar).
 2. **Bahasa Campuran (Arab & Indonesia)**: Teks hadis menggabungkan bahasa Arab (untuk matan hadis) dan bahasa Indonesia (untuk transliterasi dan terjemahan). Mesin *Screen Reader* sering kali salah melafalkan bahasa Arab jika dipaksa dibaca menggunakan *engine* suara bahasa Indonesia, atau sebaliknya.
-3. **Navigasi Audio**: Kontrol audio tradisional (seperti *scrubbing bar* visual) sangat sulit digunakan oleh tunanetra karena membutuhkan presisi visual.
+3. **Navigasi Audio**: Kontrol audio visual tradisional (seperti *scrubbing bar* visual) sangat sulit digunakan oleh tunanetra karena membutuhkan presisi sentuhan visual.
 
 ## 2. Design Decision
 
 Untuk mengatasi tantangan di atas, kami mengambil pendekatan **A11y-First (Accessibility-First)**:
-- **Semantic HTML**: Struktur *markup* yang benar-benar mewakili fungsinya.
-- **Language Detection by Element**: Penandaan bahasa pada level elemen HTML, bukan hanya di level *document root*.
-- **A-B Looping**: Metode menghafal berulang yang diaktifkan dengan tombol sederhana tanpa harus menggeser progres audio.
+- **Semantic HTML**: Struktur *markup* standar (`<header>`, `<main>`, `<nav>`, `<button>`, `<article>`) yang mewakili fungsinya secara eksplisit.
+- **Language Detection by Element**: Penandaan bahasa pada level elemen HTML (`lang="ar"` dan `lang="id"`).
+- **Responsive Audio Controls**: Tombol navigasi audio yang jelas (Putar/Jeda, Maju 10 detik, Mundur 10 detik, Ulang dari Awal, dan Pengatur Kecepatan Putar).
 - **Live Regions**: Mekanisme untuk "berbicara" langsung kepada pengguna saat terjadi perubahan *state* penting tanpa mengganggu fokus pembacaan mereka.
 
 ## 3. Implementation
 
 ### 3.1. Penandaan Bahasa Aksara Arab
-Agar *Screen Reader* membaca teks Arab dengan lafaz yang benar dan tidak dieja huruf-per-huruf oleh mesin bahasa Indonesia, kami menerapkan atribut `lang="ar"` dan `dir="rtl"`.
+Agar *Screen Reader* membaca teks Arab dengan lafaz dan tajwid yang benar serta tidak dieja huruf-per-huruf oleh mesin bahasa Indonesia, kami menerapkan atribut `lang="ar"` dan `dir="rtl"`:
 
 ```html
-<!-- Contoh Implementasi -->
-<p lang="ar" dir="rtl" class="text-2xl font-arabic">
+<!-- Implementasi Matan Arab -->
+<p lang="ar" dir="rtl" class="arabic-text">
   عَنْ أَمِيرِ الْمُؤْمِنِينَ أَبِي حَفْصٍ عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللهُ عَنْهُ قَالَ...
 </p>
 ```
 
 ### 3.2. WAI-ARIA Live Regions
-Saat pengguna mengaktifkan mode A-B Loop, kami menggunakan elemen aria-live untuk memberikan *feedback* verbal.
+Saat pengguna menjeda, memutar, atau mengubah kecepatan audio, kami menggunakan elemen `role="status"` dengan `aria-live="polite"` yang tersembunyi secara visual (`sr-only`):
 
 ```html
-<div aria-live="polite" class="sr-only">
-  {isLooping ? 'Mode pengulangan audio diaktifkan' : 'Mode pengulangan dinonaktifkan'}
+<div className="sr-only" role="status" aria-live="polite">
+  {announcement}
 </div>
 ```
 
 ### 3.3. Kontrol Navigasi yang *Accessible*
-Semua elemen interaktif dibungkus dengan `<button>` alih-alih `<div>` dengan event `onClick`. Jika harus menggunakan elemen kustom, kami menyertakan atribut `role` dan `tabIndex="0"`.
+Semua elemen interaktif dibungkus dengan `<button>` asli yang menyertakan atribut `aria-label` deskriptif.
 
-Untuk slider audio (meskipun ada, namun jarang digunakan langsung berkat A-B Loop), kami menggunakan peran *slider*:
+Untuk slider kemajuan audio, kami menyertakan atribut peran slider:
 ```html
-<input 
-  type="range"
+<div
   role="slider"
-  aria-label="Progress Audio"
-  aria-valuemin="0"
-  aria-valuemax="100"
-  aria-valuenow={progress}
-/>
+  aria-label="Kemajuan Audio Hadis"
+  aria-valuemin={0}
+  aria-valuemax={100}
+  aria-valuenow={progressPercent}
+>
+  ...
+</div>
 ```
 
 ## 4. Result & Impact
 
-Dengan arsitektur aksesibilitas di atas, hasil yang dicapai adalah:
-- **Perpindahan Aksen Suara yang Mulus**: Pengguna melaporkan bahwa *Screen Reader* otomatis berpindah ke aksen Arab saat membaca hadis dan kembali ke aksen Indonesia saat membaca terjemahan.
-- **Navigasi Gestur Penuh**: Pengguna dapat menjelajahi seluruh daftar 40 hadis murni dengan gestur *swipe-right* / *swipe-left* (di iOS/Android) tanpa harus meraba seluruh layar.
-- **Kemandirian Menghafal**: Adanya tombol A-B Loop yang terbaca jelas oleh *Screen Reader* memungkinkan santri tunanetra untuk memutar ulang segmen hadis berkali-kali tanpa harus mencari secara visual bar kemajuan (*progress bar*) audio.
+Dengan arsitektur aksesibilitas di atas:
+- **Perpindahan Aksen Suara yang Mulus**: *Screen Reader* otomatis berpindah ke aksen Arab saat membaca hadis dan kembali ke aksen Indonesia saat membaca terjemahan.
+- **Navigasi Gestur Penuh**: Pengguna dapat menjelajahi seluruh daftar 42 hadis murni dengan gestur usap (*swipe-right* / *swipe-left*) tanpa harus meraba seluruh layar.
+- **Kemandirian Belajar**: Tombol kontrol audio dan status hafalan yang terbaca jelas memungkinkan santri tunanetra belajar dan menghafal hadis secara mandiri.
 
 ## 5. Audit & Validation
-Situs ini secara konsisten lulus *Lighthouse Accessibility Audit* dengan skor **100/100**, dan divalidasi secara manual menggunakan **VoiceOver** (iOS) dan **TalkBack** (Android).
+Situs ini diuji dan divalidasi secara manual menggunakan **VoiceOver** (iOS/macOS), **TalkBack** (Android), dan **NVDA** (Windows).

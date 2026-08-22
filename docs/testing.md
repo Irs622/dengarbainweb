@@ -1,45 +1,45 @@
 # Testing Methodology: DengarBain
 
-Aplikasi DengarBain diuji tidak hanya dari fungsionalitas fiturnya, tetapi juga diuji secara ketat berdasarkan metrik aksesibilitas dan kemampuannya bekerja di lingkungan *Offline*.
+Aplikasi DengarBain diuji tidak hanya dari fungsionalitas fiturnya, tetapi juga diuji secara ketat berdasarkan metrik aksesibilitas (A11y), performa, dan kemampuannya bekerja di lingkungan *Offline-First*.
 
-Dokumen ini menjelaskan strategi pengujian (*Testing Strategy*) yang kami terapkan dalam pengembangan.
+Dokumen ini menjelaskan strategi pengujian (*Testing Strategy*) yang diterapkan dalam pengembangan dan validasi rilis produksi.
 
 ## 1. Accessibility Testing (A11y)
 
-Karena target utama kami adalah individu tunanetra, uji aksesibilitas adalah proses *quality assurance* terpenting di proyek ini.
+Karena target utama kami adalah individu tunanetra dan santri berkebutuhan khusus, uji aksesibilitas adalah proses *quality assurance* terpenting di proyek ini.
 
 ### 1.1. Automated Auditing
 Setiap rilis fitur diuji menggunakan **Lighthouse Accessibility Audit** (berjalan via Chrome DevTools). 
 - **Target Skor**: 100/100
-- **Fokus Metrik**: Penggunaan *ARIA attributes*, *color contrast* (skema gelap yang ramah disabilitas penglihatan parsial), ketiadaan tag berulang yang membingungkan *screen reader*.
+- **Fokus Metrik**: Kepatuhan atribut ARIA, kontras warna (*High Contrast Theme* hijau `#1A5C40` dan aksen `#C8F1DF`), ketiadaan tag berulang, dan struktur heading semantik (`<h1>` s.d. `<h3>`).
 
 ### 1.2. Manual Screen Reader Testing
-Pengujian otomatis menggunakan bot tidak cukup untuk memastikan kelancaran navigasi suara. Kami rutin melakukan pengujian manual menggunakan:
+Pengujian manual menggunakan pembaca layar dilakukan secara berkala pada berbagai platform:
 - **Android**: *TalkBack* dengan gestur usap (*swipe gestures*).
-- **iOS / macOS**: *VoiceOver* menggunakan navigasi *rotor* dan gestur jari.
+- **iOS / macOS**: *VoiceOver* menggunakan navigasi gestur jari dan *rotor*.
 - **Desktop (Windows)**: NVDA untuk memastikan kompatibilitas aplikasi web *desktop*.
 
 **Kasus Uji (*Test Cases*):**
-- Memastikan perpindahan aksen (dari Indonesia ke Arab) berjalan mulus di setiap kartu hadis.
-- Memastikan notifikasi "A-B Loop diaktifkan" terdengar tanpa memindahkan kursor (menggunakan elemen `aria-live`).
-- Memastikan pengguna dapat kembali ke halaman utama murni hanya menggunakan tombol *Back* dan gestur *Screen Reader*.
+- Memastikan perpindahan aksen (dari Indonesia ke Arab) berjalan mulus di setiap matan hadis berkat atribut `lang="ar"` dan `dir="rtl"`.
+- Memastikan notifikasi perubahan status audio (Putar, Jeda, Lompat Waktu, Kecepatan) terdengar melalui live region tanpa memindahkan kursor (menggunakan elemen `role="status"` dan `aria-live="polite"`).
+- Memastikan navigasi kembali (*Back button*) terbaca jelas dengan label *"Kembali ke Halaman Sebelumnya"*.
 
 ### 1.3. Keyboard Navigation Testing
 Setiap alur kritis harus dapat diselesaikan tanpa *mouse*:
-1. Menekan `Tab` untuk berpindah antarelemen interaktif.
-2. Menggunakan `Space` / `Enter` untuk menekan tombol.
-3. Menggunakan tombol panah `Arrow Up` / `Arrow Down` untuk mengontrol volume atau navigasi slider progress audio.
+1. Menekan `Tab` dan `Shift+Tab` untuk berpindah antarelemen interaktif.
+2. Menggunakan `Space` / `Enter` untuk memicu tombol atau membuka hadis.
+3. Menggunakan tombol panah untuk navigasi.
 
 ## 2. Offline & PWA Testing
 
-Untuk memastikan santri tetap bisa mengakses hadis saat aplikasi tidak terhubung internet, kami menggunakan **Chrome DevTools (Application Tab & Network Tab)**:
+Untuk memastikan santri tetap bisa mengakses 42 hadis saat aplikasi tidak terhubung internet:
 
-1. **Simulasi Offline**: Mematikan centang jaringan (mode *Offline*) dan me-*refresh* halaman untuk memverifikasi halaman HTML utama tetap termuat dari *Service Worker*.
-2. **Audio Caching**: Memutar audio saat *Online* sekali, lalu mematikan jaringan dan mencoba memutar audio kembali untuk memastikan ekstensi MP3 diambil secara aman dari *(disk cache)*.
-3. **Background Sync**: Menyimpan data progres (hadis telah dihafal) pada mode *Offline*, lalu menyalakan jaringan untuk menguji apakah Dexie.js mengirim antrean data (*queue*) ke server.
+1. **Simulasi Offline PWA**: Mematikan koneksi jaringan (mode *Offline* di Chrome DevTools atau Mode Pesawat di HP) dan me-*refresh* halaman untuk memverifikasi seluruh 57 halaman termuat dari *Service Worker* (`dengarbain-cache-v2`).
+2. **Bulk Audio Caching Test**: Menjalankan fitur **"Unduh Semua 42 Audio (Mode Luring)"** di `/settings/storage`, lalu mematikan jaringan internet dan memverifikasi bahwa seluruh 42 audio hadis dapat diputar lancar dari *Cache Storage*.
+3. **Dual Storage Persistence Test**: Mengubah status hafalan (*Belum* -> *Sedang* -> *Hafal*), me-*refresh* peramban, dan memverifikasi data tetap tersimpan di *IndexedDB* dan *LocalStorage*.
 
-## 3. Performance Testing
+## 3. Production Build & Performance Testing
 
-Tunanetra acap kali menggunakan perangkat seluler generasi lawas yang diberikan oleh donatur atau sekolah, sehingga optimalisasi performa *render* menjadi wajib.
-- Kami memonitor **First Contentful Paint (FCP)** dan **Time to Interactive (TTI)**.
-- Mengandalkan *Static Site Generation* (SSG) dari Next.js untuk menjaga nilai FCP di bawah 1.5 detik pada koneksi lambat (3G) di metrik tes lab (*Lighthouse Performance*).
+1. **Static Site Generation (SSG)**: Memastikan `npm run build` berhasil memproduksi 57/57 halaman statis dengan 0 error dan 0 warning.
+2. **Speed & First Contentful Paint (FCP)**: Memonitor FCP di bawah 1.5 detik pada koneksi jaringan seluler standar.
+3. **Live Production Deployment**: Memverifikasi ketersediaan aplikasi di domain produksi `https://production-eight-mu.vercel.app`.

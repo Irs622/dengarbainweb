@@ -1,22 +1,24 @@
 # DengarBain — Web Accessibility Platform for Blind Users 📖🎧
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Next.js-15.3.9-black?style=for-the-badge&logo=next.js" alt="Next.js" />
   <img src="https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Vanilla_CSS-Tailored_Theme-38B2AC?style=for-the-badge" alt="CSS Design" />
   <img src="https://img.shields.io/badge/PWA-Offline_First-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white" alt="PWA Offline First" />
   <img src="https://img.shields.io/badge/A11y-WCAG_AAA-green?style=for-the-badge" alt="WCAG AAA" />
+  <img src="https://img.shields.io/badge/Production-Live_on_Vercel-0070F3?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Live" />
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License MIT" />
 </p>
 
-> **DengarBain** adalah Progressive Web App (PWA) inklusif yang dirancang khusus untuk memfasilitasi santri dan pengguna tunanetra dalam mengakses, mendengarkan, serta menghafal **40 Hadis Arbain An-Nawawiyah** secara mandiri. Aplikasi ini menggabungkan antarmuka non-visual ramah *Screen Reader*, mesin pengulangan audio (*A-B Looping*), dan arsitektur *Offline-First* tanpa hambatan otentikasi (*No-Login / Frictionless*).
+> **DengarBain** adalah Progressive Web App (PWA) inklusif yang dirancang khusus untuk memfasilitasi santri dan pengguna tunanetra dalam mengakses, mendengarkan, serta menghafal **42 Hadis Arbain An-Nawawiyah** secara mandiri. Aplikasi ini menggabungkan antarmuka non-visual ramah *Screen Reader*, pemutar audio responsif berkecepatan dinamis, paket unduh luring 1-klik (*Bulk Offline Cache*), dan arsitektur *Offline-First* tanpa hambatan otentikasi (*No-Login / Frictionless*).
 
 ---
 
-## 🚧 Status Proyek & Demo
+## 🌐 Live Production Demo
 
-> **Status:** `In Active Development` 🛠️  
-> Proyek ini sedang dalam tahap pengembangan aktif, pengujian aksesibilitas (*screen reader*), dan persiapan *deployment*. Tautan *live demo* serta dokumentasi visual (*screenshots* & demo suara) akan dipublikasikan setelah tahap rilis produksi selesai.
+* **Live Web App**: [https://production-eight-mu.vercel.app](https://production-eight-mu.vercel.app)
+* **Production Branch**: [`production`](https://github.com/Irs622/dengarbainweb/tree/production)
+* **Main Branch**: [`main`](https://github.com/Irs622/dengarbainweb/tree/main)
 
 ---
 
@@ -28,13 +30,14 @@
 
 ## 💡 The Solution
 DengarBain dibangun dari nol dengan paradigma **A11y-First (Accessibility-First)** dan **Offline-First**:
-- **100% Screen Reader Optimized**: Setiap elemen struktural menggunakan Semantic HTML5 dan atribut WAI-ARIA yang terkalibrasi untuk navigasi gestur *swipe*.
-- **Offline-First Audio & PWA**: Seluruh berkas aplikasi dan audio Hadis tersimpan di *cache* lokal sehingga dapat diakses penuh di daerah tanpa sinyal.
+- **100% Screen Reader Optimized**: Setiap elemen struktural menggunakan Semantic HTML5 dan atribut WAI-ARIA yang terkalibrasi untuk navigasi gestur *swipe* dan pembaca layar.
+- **Offline-First Audio & PWA**: Seluruh berkas aplikasi dan 42 rekaman audio Hadis berformat `.wav` dapat diunduh dalam 1-klik dan tersimpan di *Cache Storage* lokal untuk pemutaran tanpa kuota data.
 - **Frictionless Experience**: Tidak ada form registrasi atau *login*. Identitas dan riwayat progres belajar diikat secara anonim ke perangkat lokal (*Device UUID*).
+- **Dual Local Storage**: Sinkronisasi dua arah instan antara `IndexedDB` dan `LocalStorage` untuk menjamin keamanan data progres belajar, streak harian, dan riwayat aktivitas.
 
 ## 👤 Target User
-- **Santri Tunanetra**: Membutuhkan media audio berulang untuk memperkuat hafalan (*tahfidz*) Hadis Arbain.
-- **Tunanetra Mandiri**: Pengguna disabilitas netra yang ingin mempelajari terjemahan dan kandungan hadis tanpa bantuan orang awas (*sighted guide*).
+- **Santri Tunanetra**: Membutuhkan media audio berulang dan kontrol kecepatan putar untuk memperkuat hafalan (*tahfidz*) 42 Hadis Arbain.
+- **Tunanetra Mandiri**: Pengguna disabilitas netra yang ingin mempelajari terjemahan, kosakata pilihan (*kata-kata pilihan*), urgensi hadis, dan konteks sebab turun hadis tanpa bantuan orang awas (*sighted guide*).
 - **Pengajar / Pembina Pesantren**: Memantau progres belajar santri secara luring.
 
 ---
@@ -45,29 +48,26 @@ Berikut adalah rincian teknologi yang digunakan dan alasan teknikal di balik pem
 
 | Lapisan / Komponen | Teknologi yang Digunakan | Justifikasi Teknikal & Rekayasa |
 | :--- | :--- | :--- |
-| **Frontend Framework** | **Next.js 14+ / 15 (App Router)** | Menyediakan *Static Site Generation* (SSG) untuk memproduksi *bundle* HTML statis yang dapat dimuat seketika (*instant-load*) dan sangat ramah *Service Worker*. |
-| **Bahasa Pemrograman** | **TypeScript 5.x** | Menjamin keamanan tipe data (*Type Safety*), mencegah *runtime error*, dan mempermudah pemodelan data teks hadis, transliterasi, serta status hafalan. |
-| **UI Primitives & A11y** | **Radix UI Primitives** | Merender komponen interaktif tak berstilisasi yang membawa kepatuhan WAI-ARIA bawaan, manajemen fokus kursor otomatis (*focus trapping*), dan dukungan navigasi keyboard penuh. |
-| **Styling Engine** | **Tailwind CSS & CSS Variables** | Memungkinkan penyusunan tema *High-Contrast* (skema warna hijau tua `#1A5C40` dan latar netral `#F4F3EE`), serta utilitas pembaca layar khusus (`sr-only`) untuk label tak terlihat. |
-| **PWA & Offline Core** | **Workbox (Service Worker)** | Mengelola *Precaching* aset aplikasi dan strategi *Cache-First* untuk file audio MP3 Hadis, memungkinkan pemutaran audio lancar tanpa kuota internet. |
-| **Penyimpanan Lokal (Client)** | **IndexedDB / Dexie.js (`lib/db.ts`)** | Menyimpan status progres 40 hadis (`hafal`, `sedang`, `belum`), stempel waktu terakhir didengarkan, dan titik pengulangan *A-B Loop* langsung di peramban pengguna. |
-| **Audio Engine** | **Web Audio API & HTML5 Audio** | Mengendalikan *playback* audio presisi tinggi, penghitungan akumulasi detik belajar, dan pemutaran ulang segmen tertentu (*A-B Looping*) tanpa *glitch*. |
-| **Backend & ORM (Sync)** | **Next.js Route Handlers & Prisma ORM** | Endpoint API ringan untuk menangani sinkronisasi data analitik progres latar belakang (*Background Sync*) dari perangkat lokal. |
-| **Database Server** | **PostgreSQL** | *Database* relasional untuk menampung data agregasi progres hafalan berbasis *Device UUID* anonim. |
-| **Audio Storage & CDN** | **Cloudflare R2 + Cloudflare CDN** | Penyimpanan objek audio Hadis dengan biaya *bandwidth egress* $0, memastikan pengiriman audio berkecepatan tinggi ke seluruh jaringan. |
+| **Frontend Framework** | **Next.js 15 (App Router)** | Menyediakan *Static Site Generation* (SSG) untuk memproduksi *bundle* HTML statis (57 halaman) yang dimuat seketika (*instant-load*) dan terintegrasi dengan *Service Worker*. |
+| **Bahasa Pemrograman** | **TypeScript 5.x** | Menjamin keamanan tipe data (*Type Safety*), mencegah *runtime error*, dan memodelkan data 42 hadis, kosakata pilihan, urgensi, dan status hafalan. |
+| **Styling & Theme** | **Vanilla CSS + CSS Variables** | Tema berestetika tinggi dengan palet warna hijau tua `#1A5C40`, aksen `#C8F1DF`, latar netral `#F4F3EE`, serta utilitas pembaca layar khusus (`sr-only`) untuk label suara tak terlihat. |
+| **PWA & Offline Core** | **Service Worker (`public/sw.js`)** | Cache v2 (`dengarbain-cache-v2`) dengan strategi *Cache-First* untuk 42 berkas audio `.wav`, *Pre-caching* rute utama, dan *Stale-While-Revalidate* untuk aset statis. |
+| **Penyimpanan Lokal (Client)** | **IndexedDB & LocalStorage (`lib/db.ts`)** | *Dual-Storage Helper* untuk menyimpan status 42 hadis (`hafal`, `sedang`, `belum`), stempel waktu belajar, streak harian, dan 15 riwayat aktivitas terbaru. |
+| **Audio Engine** | **HTML5 Audio & Web APIs** | Mengendalikan pemutaran 42 berkas audio `.wav`, tombol lompat mundur 10 detik, maju 10 detik, restart awal, dan pengatur kecepatan (0.75x, 1.0x, 1.25x, 1.5x). |
+| **Deployment Platform** | **Vercel Cloud Platform** | Hosting global berkecepatan tinggi dengan edge CDN, SSL/HTTPS otomatis untuk PWA, dan continuous deployment dari branch `production`. |
 
 ---
 
 ## ♿ Rekayasa Aksesibilitas (A11y Engineering)
 
-DengarBain tidak hanya memenuhi standar aksesibilitas dasar, tetapi secara khusus dikalibrasi untuk perilaku mesin pembaca layar:
+DengarBain dikalibrasi untuk perilaku mesin pembaca layar (*TalkBack* / *VoiceOver*):
 
 1. **Aksen & Pengucapan Tajwid (`lang="ar"` & `dir="rtl"`)**
-   - Teks Arab pada matan hadis dibungkus secara eksplisit dengan `<p lang="ar" dir="rtl">`. Hal ini memaksa mesin sintetis suara (*Text-to-Speech*) TalkBack/VoiceOver beralih ke aksen bahasa Arab dan melafalkan harakat serta tajwid dengan presisi tinggi, alih-alih mengejanya dengan aksen Indonesia.
+   - Teks Arab pada matan hadis dibungkus secara eksplisit dengan `<p lang="ar" dir="rtl">`. Hal ini memaksa mesin sintetis suara (*Text-to-Speech*) TalkBack/VoiceOver beralih ke aksen bahasa Arab dan melafalkan harakat serta tajwid dengan presisi tinggi.
 2. **Penandaan Bahasa Indonesia (`lang="id"`)**
-   - Terjemahan dan transliterasi ditandai dengan `lang="id"` agar suara pembaca layar kembali ke fonetik bahasa Indonesia yang alami.
-3. **Live Regions (`aria-live="polite"`)**
-   - Status perubahan aplikasi (misalnya: `"Mode pengulangan audio diaktifkan"`) diumumkan langsung ke telinga pengguna tanpa memindahkan fokus kursor saat ini.
+   - Terjemahan, perawi, urgensi, dan kosakata ditandai dengan `lang="id"` agar suara pembaca layar kembali ke fonetik bahasa Indonesia yang alami.
+3. **Live Regions (`role="status"` & `aria-live="polite"`)**
+   - Status perubahan audio (seperti `"Audio dijeda"`, `"Kecepatan audio diatur ke 1.25x"`, `"Semua 42 audio hadis berhasil tersimpan luring"`) diumumkan langsung ke telinga pengguna tanpa memindahkan fokus kursor.
 4. **Accessible Audio Controls & Sliders**
    - Kontrol pemutar audio menyertakan atribut ARIA lengkap (`role="slider"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-label`) sehingga pengguna mengetahui persentase pemutaran hadis yang sedang berjalan.
 5. **Navigasi Gestur Usapan Penuh (*Swipe Gestures*)**
@@ -83,9 +83,9 @@ DengarBain tidak hanya memenuhi standar aksesibilitas dasar, tetapi secara khusu
 graph TD
     subgraph Client [Perangkat Pengguna / PWA Client]
         UI[Next.js App Router UI]
-        SW[Service Worker - Workbox]
-        IDB[(IndexedDB - Dexie.js)]
-        AudioEngine[Web Audio Player]
+        SW[Service Worker v2 - sw.js]
+        IDB[(IndexedDB & LocalStorage)]
+        AudioEngine[HTML5 Audio Player]
         
         UI <--> SW
         SW <--> IDB
@@ -93,22 +93,19 @@ graph TD
         UI <--> IDB
     end
 
-    subgraph Cloud Infrastructure [Server & Storage]
-        API[Next.js Route Handlers]
-        DB[(PostgreSQL - Prisma)]
-        R2[Cloudflare R2 Storage]
+    subgraph Hosting [Vercel Global Edge CDN]
+        VercelCDN[Static Assets & 42 WAV Audios]
     end
 
-    SW -- "1. Cache-First Audio MP3" --> R2
-    UI -- "2. Sync Progres Luring saat Online" --> API
-    API -- "3. Batch Insert/Update" --> DB
+    SW -- "1. Bulk Cache / Cache-First Audio" --> VercelCDN
+    UI -- "2. Dual Storage Write (Progress & Stats)" --> IDB
 ```
 
 ### Siklus Alur Data:
-1. **Pemuatan Pertama (*First Load*)**: Service Worker mengunduh seluruh *bundle* HTML, CSS, dan skrip aplikasi ke *Cache Storage*.
-2. **Pemutaran Audio**: Saat audio hadis diputar, Service Worker memeriksa *cache*. Jika file MP3 belum ada, sistem mengunduhnya dari CDN Cloudflare R2, memutarnya, dan menyimpannya di *cache* lokal.
-3. **Penyimpanan Status Belajar**: Setiap detik mendengarkan dan perubahan status hadis disimpan ke *IndexedDB* secara instan tanpa menunggu respons jaringan.
-4. **Sinkronisasi Latar Belakang**: Saat koneksi internet terdeteksi (`navigator.onLine`), sistem secara otomatis mengirimkan pembaruan data anonim ke *server*.
+1. **Pemuatan Pertama (*First Load*)**: Service Worker mengunduh seluruh *bundle* HTML statis, CSS, dan aset visual utama ke *Cache Storage*.
+2. **Paket Unduh Luring 1-Klik**: Pengguna dapat menekan satu tombol di menu *Kelola Penyimpanan* untuk mengunduh dan menyimpan seluruh 42 rekaman audio `.wav` sekaligus ke *Cache Storage*.
+3. **Pemutaran Audio**: Saat audio hadis diputar, Service Worker memeriksa *cache*. Jika audio sudah ada di memori luring, ia dimuat seketika tanpa menggunakan kuota data internet.
+4. **Penyimpanan Status Belajar**: Setiap detik mendengarkan, durasi belajar, streak hari berturut-turut, dan perubahan status hadis disimpan ke *IndexedDB* + *LocalStorage* secara sinkron.
 
 📚 *Baca rincian arsitektur teknis di [Architecture Document](docs/architecture.md).*
 
@@ -116,9 +113,11 @@ graph TD
 
 ## ✨ Fitur-Fitur Utama
 
-- 📖 **40 Hadis Arbain An-Nawawiyah Lengkap**: Dilengkapi matan Arab berharakat, transliterasi latin, terjemahan bahasa Indonesia, dan riwayat perawi.
-- 🔁 **A-B Looping Hafalan**: Memungkinkan santri menentukan rentang pengulangan audio untuk mempermudah talaqqi dan hafalan mandiri.
-- 📊 **Tracker Progres Belajar**: Melacak jumlah hadis yang telah dihafal (*Hafal, Sedang, Belum*) serta akumulasi waktu belajar harian.
+- 📖 **42 Hadis Arbain An-Nawawiyah Lengkap**: Matan Arab berharakat, transliterasi latin, terjemahan bahasa Indonesia, perawi, status riwayat, urgensi hadis, sebab turunnya hadis (konteks), dan kosakata pilihan.
+- 🎧 **Pemutar Audio Multi-Kecepatan**: Putar, jeda, lompat mundur 10s, lompat maju 10s, ulang awal, dan atur kecepatan putar (0.75x, 1.0x, 1.25x, 1.5x).
+- 📦 **1-Click Bulk Offline Audio Cache**: Mengunduh seluruh 42 file audio hadis sekaligus ke *Cache Storage* dengan *live progress bar* untuk penggunaan 100% luring.
+- 📊 **Tracker Progres Belajar Real-Time**: Melacak jumlah hadis yang telah dihafal (*Hafal, Sedang, Belum*), persentase capaian, streak harian, total jam belajar, dan 15 riwayat aktivitas terakhir.
+- 💾 **Kelola Penyimpanan Terpadu**: Pantau kapasitas memori terpakai, kuota peramban, berkas audio tersimpan, dan opsi pembersihan cache lokal.
 - 📶 **100% Operasional Luring**: Bekerja penuh di mode pesawat (*Airplane Mode*) atau area tanpa koneksi seluler.
 - 📱 **Installable PWA**: Dapat dipasang ke layar utama (*Home Screen*) perangkat Android, iOS, maupun desktop dengan ikon mandiri.
 
@@ -128,21 +127,21 @@ graph TD
 
 Proyek ini dirancang dan dibangun melalui kolaborasi terfokus antara dua pengembang:
 
-**[Irsal Shydiq](https://github.com/Irs622)** — *Project Manager, Backend & PWA Developer, UI/UX*
-- **Product Management & UI/UX**: Memimpin inisiasi konsep produk, riset kebutuhan santri tunanetra, dan perancangan alur interaksi non-visual.
-- **Backend & Database**: Merancang arsitektur API, skema PostgreSQL menggunakan Prisma ORM, dan mekanisme *Background Synchronization*.
-- **PWA & Offline Core**: Mengimplementasikan *Service Worker* (Workbox), strategi penyimpanan *Cache-First*, dan integrasi IndexedDB (Dexie.js).
+**[Irsal Shydiq](https://github.com/Irs622)** — *Project Manager, Lead Developer & UI/UX*
+- **Product Architecture & UI/UX**: Memimpin inisiasi konsep produk, riset kebutuhan santri tunanetra, dan perancangan arsitektur antarmuka ramah non-visual.
+- **PWA & Offline Core Engine**: Mengembangkan *Service Worker v2*, sistem *Dual-Storage* (IndexedDB + LocalStorage), fitur *Bulk Audio Cache*, dan manajemen kapasitas memori peramban.
+- **Data & Dataset Engineering**: Menyusun dan mengintegrasikan dataset 42 Hadis Arbain lengkap (matan Arab, transliterasi, terjemahan, urgensi, konteks, dan kosakata pilihan).
 
-**[Fardho Dzurrahman](https://github.com/fardhoz25)** — *Frontend Developer & UI/UX*
-- **Frontend & Audio Engine**: Mengembangkan antarmuka responsif berbasis Next.js App Router, integrasi pemutar audio (*A-B Looping*), dan penataan gaya Tailwind CSS.
-- **Accessible UI/UX**: Mengembangkan komponen interaktif (Radix UI) yang ramah terhadap navigasi gestur *TalkBack* (Android) & *VoiceOver* (iOS).
+**[Fardho Dzurrahman](https://github.com/fardhoz25)** — *Frontend Developer & Accessible UI*
+- **Frontend & Audio Player**: Mengembangkan antarmuka responsif berbasis Next.js App Router, integrasi pemutar audio HTML5 responsif, dan penataan gaya antarmuka.
+- **Accessible UI/UX**: Mengembangkan komponen interaktif yang ramah terhadap navigasi gestur *TalkBack* (Android) & *VoiceOver* (iOS).
 
 ---
 
 ## 🚀 Panduan Menjalankan di Lokal (Local Setup)
 
 ### Prasyarat Sistem
-- **Node.js**: Versi `18.17.0` atau lebih baru
+- **Node.js**: Versi `18.17.0` atau lebih baru (Disarankan Node.js 20+ / 22+)
 - **npm**: Versi `9.0.0` atau lebih baru
 - **Git**
 
@@ -159,20 +158,13 @@ Proyek ini dirancang dan dibangun melalui kolaborasi terfokus antara dua pengemb
    npm install
    ```
 
-3. **Konfigurasi Lingkungan (*Environment Variables*):**
-   Salin file template `.env.example` menjadi `.env.local`:
-   ```bash
-   cp .env.example .env.local
-   ```
-   Sesuaikan variabel konfigurasi (URL Database & Cloudflare R2) jika ingin menghubungkan ke backend.
-
-4. **Jalankan Development Server:**
+3. **Jalankan Development Server:**
    ```bash
    npm run dev
    ```
    Aplikasi akan berjalan di [http://localhost:3000](http://localhost:3000).
 
-5. **Pengujian Build Produksi:**
+4. **Pengujian Build Produksi:**
    ```bash
    npm run build
    npm run start
@@ -188,7 +180,7 @@ Untuk menguji fitur aksesibilitas DengarBain secara mandiri:
    - **macOS / iOS**: Aktifkan **VoiceOver** (`Cmd + F5` di Mac atau via Pengaturan Aksesibilitas di iOS).
    - **Android**: Aktifkan **TalkBack** di Pengaturan Aksesibilitas.
    - **Windows**: Gunakan **NVDA** atau **JAWS**.
-3. **Audit Lighthouse**: Buka Chrome DevTools (`F12`), masuk ke tab *Lighthouse*, centang kategori *Accessibility*, dan jalankan audit untuk melihat skor kepatuhan 100/100.
+3. **Audit Lighthouse**: Buka Chrome DevTools (`F12`), masuk ke tab *Lighthouse*, centang kategori *Accessibility*, dan jalankan audit untuk melihat skor kepatuhan tinggi.
 
 📚 *Baca panduan metodologi pengujian di [Testing Methodology](docs/testing.md).*
 
@@ -197,7 +189,6 @@ Untuk menguji fitur aksesibilitas DengarBain secara mandiri:
 ## 🤝 Kontribusi & Komunitas
 Kami sangat menyambut partisipasi dan kontribusi dari komunitas pengembang:
 - Silakan baca panduan lengkap cara berkontribusi di [CONTRIBUTING.md](CONTRIBUTING.md).
-- Harap patuhi kode etik komunitas di [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ---
 
